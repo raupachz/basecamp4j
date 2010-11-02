@@ -126,5 +126,6 @@ public class Category implements Serializable {
 					.append("type",getType())
 					.toString();
 	}
+	
 
 }
