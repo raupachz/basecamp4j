@@ -7,12 +7,12 @@ import org.jdom.Element;
 
 public class Subscription implements Serializable {
 	
-	private String name;
 	private String writeboards;
-	private Integer projects;
-	private Long storage;
 	private Boolean ssl;
 	private Boolean timeTracking;
+	private String name;
+	private Integer projects;
+	private Long storage;
 	
 	public static class Builder {
 		

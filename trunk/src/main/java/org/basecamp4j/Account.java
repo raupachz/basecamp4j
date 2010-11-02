@@ -10,17 +10,18 @@ import org.jdom.Element;
 
 public class Account implements Serializable {
 	
+	private Date createdAt;
 	private Long id;
+	private Date updatedAt;
 	private String name;
 	private Long accountHolderId;
-	private Long primaryCompanyId;
 	private Boolean sslEnabled;
-	private Boolean emailNotificationEnabled;
 	private Boolean timeTrackingEnabled;
-	private Date updatedAt;
+	private Boolean emailNotificationEnabled;
+	private Long storage;
+	private Long primaryCompanyId;
 	private Subscription subscription;
-	private List<String> defaultAttachmentCategories;
-	private List<String> defaultPostCategories;
+	
 	
 	public static class Builder {
 		
@@ -40,6 +41,8 @@ public class Account implements Serializable {
 			emailNotificiationEnabled(element.getChildText("email-notification-enabled"));
 			timeTrackingEnabled(element.getChildText("time-tracking-enabled"));
 			updatedAt(element.getChildText("updated-at"));
+			createdAt(element.getChildText("created-at"));
+			storage(element.getChildText("storage"));
 		}
 		
 		public Builder id(Long id) {
@@ -117,6 +120,26 @@ public class Account implements Serializable {
 			return this;
 		}
 		
+		public Builder createdAt(String createdAt) {
+			this.account.setCreatedAt(BasecampApi.parseISODateTime(createdAt));
+			return this;
+		}
+		
+		public Builder createdAt(Date createdAt) {
+			this.account.setCreatedAt(createdAt);
+			return this;
+		}
+		
+		public Builder storage(Long storage) {
+			this.account.setStorage(storage);
+			return this;
+		}
+		
+		public Builder storage(String storage) {
+			this.account.setStorage(Long.valueOf(storage));
+			return this;
+		}
+		
 		public Account build() {
 			return account;
 		}
@@ -186,26 +209,28 @@ public class Account implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 	
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Long getStorage() {
+		return storage;
+	}
+
+	public void setStorage(Long storage) {
+		this.storage = storage;
+	}
+	
 	public Subscription getSubscription() {
 		return subscription;
 	}
 
 	public void setSubscription(Subscription subscription) {
 		this.subscription = subscription;
-	}
-	
-	public List<String> getDefaultAttachmentCategories() {
-		if (defaultAttachmentCategories == null) {
-			this.defaultAttachmentCategories = new ArrayList<String>();
-		}
-		return defaultAttachmentCategories;
-	}
-	
-	public List<String> getDefaultPostCategories() {
-		if (defaultPostCategories == null) {
-			this.defaultPostCategories = new ArrayList<String>();
-		}
-		return defaultPostCategories;
 	}
 	
 	@Override
@@ -219,8 +244,12 @@ public class Account implements Serializable {
 			.append("emailNotificationEnabled",getEmailNotificationEnabled())
 			.append("timeTrackingEnabled",getTimeTrackingEnabled())
 			.append("updatedAt",getUpdatedAt())
+			.append("createdAt",getUpdatedAt())
+			.append("storage",getStorage())
 			.append("subscription",getSubscription())
 			.toString();
 	}
+
+	
 	
 }
