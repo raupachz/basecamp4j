@@ -16,8 +16,12 @@ import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URIUtils;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -154,6 +158,92 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		company = new Company.Builder(root).build();
 		return company;
+	}
+	
+	/**
+	 * Returns all categories for the given project. 
+	 * @param project
+	 * @return all categories for the given project.
+	 */
+	public List<Category> getCategories(Project project) {
+		List<Category> resultList = new ArrayList<Category>();
+		URI uri = createURI("/projects/" + project.getId() + "/categories.xml");
+		InputStream httpStream = getHttpInputStream(uri);
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element e = (Element) it.next();
+			Category category = new Category.Builder(e).build();
+			resultList.add(category);
+		}
+		return resultList; 
+	}
+	
+	/**
+	 * Creates a new category of the given type for the given project.
+	 * @param project
+	 * @param name 
+	 * @param type muste be one of "post" or "attachment"
+	 */
+	public void createCategory(Project project, final String name, final String type) {
+		URI uri = createURI("/projects/" + project.getId() + "/categories.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<category>");
+		sb.append("  <type>").append(type).append("</type>");
+		sb.append("  <name>").append(name).append("</name>");
+		sb.append("</category>");
+		
+		try {
+			StringEntity entity = new StringEntity(sb.toString(), "UTF-8");
+			HttpPost httppost = new HttpPost(uri);
+			httppost.setEntity(entity);
+			httppost.addHeader("Accept", "application/xml");
+			httppost.addHeader("Content-Type", "application/xml");
+			HttpResponse response = httpclient.execute(httppost);
+			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
+				throw new BasecampApiException(response);
+			}
+		} catch (IOException e) {
+			throw new BasecampApiException(e);
+		}
+	}
+	
+	public void updateCategory(Category category) {
+		URI uri = createURI("/categories/" + category.getId() + ".xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<category>");
+		sb.append("  <name>").append(category.getName()).append("</name>");
+		sb.append("</category>");
+		
+		try {
+			StringEntity entity = new StringEntity(sb.toString(), "UTF-8");
+			HttpPut httpput = new HttpPut(uri);
+			httpput.setEntity(entity);
+			httpput.addHeader("Accept", "application/xml");
+			httpput.addHeader("Content-Type", "application/xml");
+			HttpResponse response = httpclient.execute(httpput);
+			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+				throw new BasecampApiException(response);
+			}
+		} catch (IOException e) {
+			throw new BasecampApiException(e);
+		}
+	}
+	
+	public void deleteCategory(Category category) {
+		URI uri = createURI("/categories/" + category.getId() + ".xml");
+		
+		try {
+			HttpDelete httpdelete = new HttpDelete(uri);
+			HttpResponse response = httpclient.execute(httpdelete);
+			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+				throw new BasecampApiException(response);
+			}
+		} catch (IOException e) {
+			throw new BasecampApiException(e);
+		}
 	}
 
 	
@@ -346,7 +436,7 @@ public class BasecampApi {
 			throw new BasecampApiException(e);
 		}
 	}
-
+	
 	private Document buildDocument(InputStream in) {
 		try {
 			return saxBuilder.build(in);
