@@ -73,8 +73,6 @@ public class Category implements Serializable {
 		public Category build() {
 			return category;
 		}
-		
-		
 	}
 	
 	public Long getId() {
@@ -127,5 +125,4 @@ public class Category implements Serializable {
 					.toString();
 	}
 	
-
 }

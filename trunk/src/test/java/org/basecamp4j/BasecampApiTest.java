@@ -1,7 +1,5 @@
 package org.basecamp4j;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import org.junit.After;
@@ -11,20 +9,14 @@ import org.junit.Test;
 
 public class BasecampApiTest {
 	
-	public static final String yourBasecampUrl = "https://acme.basecamphq.com"; // enter your domain
-	public static final String yourApiToken = "12345"; // enter your token
-	public static final String yourUsername = "username"; // enter your username
-	public static final String yourPassword = "password"; // enter your password
+	public static final String yourBasecampUrl = "yourdomain.basecamphq.com"; // enter your domain
+	public static final String yourApiToken = "x"; // enter your token
 	
 	private BasecampApi api;
 	
 	@Before
 	public void setUp() {
-		try {
-			api = new BasecampApi(new URL(yourBasecampUrl) , yourUsername, yourPassword);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
+		api = new BasecampApi(yourBasecampUrl , yourApiToken);
 	}
 	
 	@After
@@ -55,11 +47,52 @@ public class BasecampApiTest {
 	
 	@Test @Ignore
 	public void testGetPeopleOfProject() {
-		Project project = api.getProject(4018799L);
+		Long projectId = 1L;
+		Project project = api.getProject(projectId);
 		List<Person> people = api.getPeople(project);
 		for (Person p : people) {
 			System.out.println(p);
 		}
+	}
+	
+	@Test @Ignore
+	public void testGetCategory() {
+		Long id = 1L;
+		Category category = api.getCategory(id);
+		System.out.println(category);
+		
+	}
+	
+	@Test @Ignore
+	public void testUpdateCategory() {
+		Long id = 1L;
+		Category category = api.getCategory(id);
+		System.out.println(category);
+		category.setName("Muahhaha");
+		api.updateCategory(category);
+	}
+	
+	@Test 
+	public void testDeleteCategory() {
+		Long id = 1L;
+		Category category = api.getCategory(id);
+		System.out.println(category);
+		api.deleteCategory(category);
+	}
+	
+	@Test @Ignore
+	public void testGetCategoriesOfProject() {
+		Project project = api.getProject(1L);
+		List<Category> categories = api.getCategories(project);
+		for (Category category : categories) {
+			System.out.println(category);
+		}
+	}
+	
+	@Test @Ignore
+	public void testCreateCategory() {
+		Project project = api.getProject(1L);
+		api.createCategory(project, "Testkategorie", "post");
 	}
 	
 }
