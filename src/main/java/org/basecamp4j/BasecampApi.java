@@ -2,6 +2,7 @@ package org.basecamp4j;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -11,8 +12,10 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -20,6 +23,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -27,6 +31,21 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
+/*
+ * Copyright 2010 Björn Raupach
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
 public class BasecampApi {
 
 	final static SimpleDateFormat isodate = new SimpleDateFormat("yyyy-MM-dd");
@@ -38,7 +57,7 @@ public class BasecampApi {
 
 	/**
 	 * @see <a href="http://developer.37signals.com/basecamp/">Basecamp API</a>
-	 * @param url
+	 * @param host
 	 *            your basecamp domain
 	 * @param token
 	 *            your authentication token
@@ -56,7 +75,7 @@ public class BasecampApi {
 	public Account getAccount() {
 		Account acc = null;
 		URI uri = createURI("/account.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element account = document.getRootElement();
 		acc = new Account.Builder(account).build();
@@ -74,13 +93,11 @@ public class BasecampApi {
 	 *         no project with this ID.
 	 */
 	public Project getProject(Long id) {
-		Project project = null;
 		URI uri = createURI("/projects/" + id + ".xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		project = new Project.Builder(root).build();
-		return project;
+		return new Project.Builder(root).build();
 	}
 
 	/**
@@ -92,7 +109,7 @@ public class BasecampApi {
 	public List<Project> getProjects() {
 		List<Project> resultList = new ArrayList<Project>();
 		URI uri = createURI("/projects.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element projects = document.getRootElement();
 		for (Iterator it = projects.getChildren().iterator(); it.hasNext();) {
@@ -111,7 +128,7 @@ public class BasecampApi {
 	public List<Company> getCompanies() {
 		List<Company> resultList = new ArrayList<Company>();
 		URI uri = createURI("/companies.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -132,7 +149,7 @@ public class BasecampApi {
 	public List<Company> getCompanies(Project project) {
 		List<Company> resultList = new ArrayList<Company>();
 		URI uri = createURI("/projects/" + project.getId() + "/companies.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -151,13 +168,11 @@ public class BasecampApi {
 	 * @return single company identified by its integer ID.
 	 */
 	public Company getCompany(Long id) {
-		Company company = null;
 		URI uri = createURI("/companies/" + id + ".xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		company = new Company.Builder(root).build();
-		return company;
+		return new Company.Builder(root).build();
 	}
 	
 	/**
@@ -168,7 +183,7 @@ public class BasecampApi {
 	public List<Category> getCategories(Project project) {
 		List<Category> resultList = new ArrayList<Category>();
 		URI uri = createURI("/projects/" + project.getId() + "/categories.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -194,21 +209,13 @@ public class BasecampApi {
 		sb.append("  <name>").append(name).append("</name>");
 		sb.append("</category>");
 		
-		try {
-			StringEntity entity = new StringEntity(sb.toString(), "UTF-8");
-			HttpPost httppost = new HttpPost(uri);
-			httppost.setEntity(entity);
-			httppost.addHeader("Accept", "application/xml");
-			httppost.addHeader("Content-Type", "application/xml");
-			HttpResponse response = httpclient.execute(httppost);
-			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
-				throw new BasecampApiException(response);
-			}
-		} catch (IOException e) {
-			throw new BasecampApiException(e);
-		}
+		doPost(uri, sb.toString());
 	}
 	
+	/**
+	 * Updates an existing category.
+	 * @param category
+	 */
 	public void updateCategory(Category category) {
 		URI uri = createURI("/categories/" + category.getId() + ".xml");
 		
@@ -217,33 +224,16 @@ public class BasecampApi {
 		sb.append("  <name>").append(category.getName()).append("</name>");
 		sb.append("</category>");
 		
-		try {
-			StringEntity entity = new StringEntity(sb.toString(), "UTF-8");
-			HttpPut httpput = new HttpPut(uri);
-			httpput.setEntity(entity);
-			httpput.addHeader("Accept", "application/xml");
-			httpput.addHeader("Content-Type", "application/xml");
-			HttpResponse response = httpclient.execute(httpput);
-			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-				throw new BasecampApiException(response);
-			}
-		} catch (IOException e) {
-			throw new BasecampApiException(e);
-		}
+		doPut(uri, sb.toString());
 	}
 	
+	/**
+	 * Deletes the category. Note that only categories without elements can be deleted.
+	 * @param category
+	 */
 	public void deleteCategory(Category category) {
 		URI uri = createURI("/categories/" + category.getId() + ".xml");
-		
-		try {
-			HttpDelete httpdelete = new HttpDelete(uri);
-			HttpResponse response = httpclient.execute(httpdelete);
-			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-				throw new BasecampApiException(response);
-			}
-		} catch (IOException e) {
-			throw new BasecampApiException(e);
-		}
+		doDelete(uri);
 	}
 
 	
@@ -254,7 +244,7 @@ public class BasecampApi {
 	 */
 	public Category getCategory(Long id) {
 		URI uri = createURI("/categories/" + id + ".xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		return new Category.Builder(root).build();
@@ -266,7 +256,7 @@ public class BasecampApi {
 	 */
 	public Person getCurrentPerson() {
 		URI uri = createURI("/me.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		return new Person.Builder(root).build();
@@ -279,7 +269,7 @@ public class BasecampApi {
 	public List<Person> getPeople() {
 		List<Person> resultList = new ArrayList<Person>();
 		URI uri = createURI("/people.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -298,7 +288,7 @@ public class BasecampApi {
 	public List<Person> getPeople(Project project) {
 		List<Person> resultList = new ArrayList<Person>();
 		URI uri = createURI("/projects/" + project.getId() + "/people.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -317,7 +307,7 @@ public class BasecampApi {
 	public List<Person> getPeople(Company company) {
 		List<Person> resultList = new ArrayList<Person>();
 		URI uri = createURI("/companies/" + company.getId() + "/people.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -335,7 +325,7 @@ public class BasecampApi {
 	 */
 	public Person getPerson(Long id) {
 		URI uri = createURI("/people/" + id + ".xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		return new Person.Builder(root).build();
@@ -344,7 +334,7 @@ public class BasecampApi {
 	public List<Attachment> getFiles(Project project) {
 		List<Attachment> resultList = new ArrayList<Attachment>();
 		URI uri = createURI("/projects/" + project.getId() + "/attachments.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -363,7 +353,7 @@ public class BasecampApi {
 	public List<Post> getMessages(Project project) {
 		List<Post> resultList = new ArrayList<Post>();
 		URI uri = createURI("/projects/" + project.getId() + "/posts.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -381,7 +371,7 @@ public class BasecampApi {
 	 */
 	public Post getMessage(Long id) {
 		URI uri = createURI("/posts/" + id + ".xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		return new Post.Builder(root).build();
@@ -396,7 +386,7 @@ public class BasecampApi {
 	public List<Post> getMessages(Project project, Category category) {
 		List<Post> resultList = new ArrayList<Post>();
 		URI uri = createURI("/projects/" + project.getId() + "/cat/" + category.getId()  + "/posts.xml");
-		InputStream httpStream = getHttpInputStream(uri);
+		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
@@ -407,13 +397,17 @@ public class BasecampApi {
 		return resultList;
 	}
 	
+	/**
+	 * Shut down connection and release allocated system resources. Be sure to call
+	 * this method when you are done using the API.
+	 */
 	public void dispose() {
 		if (httpclient != null) {
 			httpclient.getConnectionManager().shutdown();
 		}
 	}
 
-	// -- Little Helpers
+	// -- Http helper methods
 	
 	private URI createURI(String path) {
 		try {
@@ -423,27 +417,68 @@ public class BasecampApi {
 		}
 	}
 
-	private InputStream getHttpInputStream(URI uri) {
+	private InputStream doGet(URI uri) {
+		HttpGet httpget = new HttpGet(uri);
+		return doMethod(httpget);
+	}
+	
+	private void doPost(URI uri, String request) {
 		try {
-			HttpGet httpget = new HttpGet(uri);
-			HttpResponse response = httpclient.execute(httpget);
-			if (!(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK 
-					|| response.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED)) {
-				throw new BasecampApiException(response);
+			StringEntity entity = new StringEntity(request, "UTF-8");
+			HttpPost httppost = new HttpPost(uri);
+			httppost.addHeader("Accept", "application/xml");
+			httppost.addHeader("Content-Type", "application/xml");
+			httppost.setEntity(entity);
+			doMethod(httppost);
+		} catch (UnsupportedEncodingException ignore) {}
+	}
+	
+	private void doPut(URI uri, String request) {
+		try {
+			StringEntity entity = new StringEntity(request, "UTF-8");
+			HttpPut httpput = new HttpPut(uri);
+			httpput.addHeader("Accept", "application/xml");
+			httpput.addHeader("Content-Type", "application/xml");
+			httpput.setEntity(entity);
+			doMethod(httpput);
+		} catch (UnsupportedEncodingException ignore) {}
+	}
+	
+	private void doDelete(URI uri) {
+		HttpDelete httpdelete = new HttpDelete(uri);
+		doMethod(httpdelete);
+	}
+	
+	private InputStream doMethod(HttpUriRequest request) {
+		try {
+			HttpResponse response = httpclient.execute(request);
+			StatusLine statusLine = response.getStatusLine();
+			if (statusLine.getStatusCode() != HttpStatus.SC_OK 
+					&& statusLine.getStatusCode() != HttpStatus.SC_CREATED) {
+				throw new RuntimeException(statusLine.getStatusCode() + " - " + statusLine.getReasonPhrase());
 			}
-			return response.getEntity().getContent();
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				return entity.getContent();
+			} else {
+				return null;
+			}
 		} catch (IOException e) {
-			throw new BasecampApiException(e);
+			throw new RuntimeException(e);
 		}
 	}
+	
+	// -- JDOM helper method
 	
 	private Document buildDocument(InputStream in) {
 		try {
 			return saxBuilder.build(in);
 		} catch (Exception e) {
-			throw new BasecampApiException(e);
+			throw new RuntimeException(e);
 		}
 	}
+	
+	// -- Date and time helper methods
 
 	public static Date parseISODate(String source) {
 		try {
