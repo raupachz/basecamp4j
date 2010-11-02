@@ -27,8 +27,7 @@ import org.jdom.input.SAXBuilder;
 public class BasecampApi {
 
 	final static SimpleDateFormat isodate = new SimpleDateFormat("yyyy-MM-dd");
-	final static SimpleDateFormat isodatetime = new SimpleDateFormat(
-			"yyyy-MM-dd'T'HH:mm:ss'Z'");
+	final static SimpleDateFormat isodatetime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	final static byte[] buffer = new byte[4096];
 
 	private URL url;
