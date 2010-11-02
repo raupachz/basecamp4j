@@ -72,7 +72,7 @@ public class BasecampApiTest {
 		api.updateCategory(category);
 	}
 	
-	@Test 
+	@Test @Ignore
 	public void testDeleteCategory() {
 		Long id = 1L;
 		Category category = api.getCategory(id);
