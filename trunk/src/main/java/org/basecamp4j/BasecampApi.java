@@ -48,9 +48,6 @@ import org.jdom.input.SAXBuilder;
  */
 public class BasecampApi {
 
-	final static SimpleDateFormat isodate = new SimpleDateFormat("yyyy-MM-dd");
-	final static SimpleDateFormat isodatetime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
 	private final String host;
 	private final DefaultHttpClient httpclient;
 	private final SAXBuilder saxBuilder;
@@ -78,8 +75,8 @@ public class BasecampApi {
 		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element account = document.getRootElement();
-		acc = new Account.Builder(account).build();
-		Subscription subscription = new Subscription.Builder(
+		acc = new AccountBuilder(account).build();
+		Subscription subscription = new SubscriptionBuilder(
 				account.getChild("subscription")).build();
 		acc.setSubscription(subscription);
 		return acc;
@@ -97,7 +94,7 @@ public class BasecampApi {
 		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		return new Project.Builder(root).build();
+		return new ProjectBuilder(root).build();
 	}
 
 	/**
@@ -114,7 +111,7 @@ public class BasecampApi {
 		Element projects = document.getRootElement();
 		for (Iterator it = projects.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Project project = new Project.Builder(e).build();
+			Project project = new ProjectBuilder(e).build();
 			resultList.add(project);
 		}
 		return resultList;
@@ -133,7 +130,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Company company = new Company.Builder(e).build();
+			Company company = new CompanyBuilder(e).build();
 			resultList.add(company);
 		}
 		return resultList;
@@ -154,7 +151,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Company company = new Company.Builder(e).build();
+			Company company = new CompanyBuilder(e).build();
 			resultList.add(company);
 		}
 		return resultList;
@@ -172,7 +169,7 @@ public class BasecampApi {
 		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		return new Company.Builder(root).build();
+		return new CompanyBuilder(root).build();
 	}
 	
 	/**
@@ -188,7 +185,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Category category = new Category.Builder(e).build();
+			Category category = new CategoryBuilder(e).build();
 			resultList.add(category);
 		}
 		return resultList; 
@@ -247,7 +244,7 @@ public class BasecampApi {
 		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		return new Category.Builder(root).build();
+		return new CategoryBuilder(root).build();
 	}
 
 	/**
@@ -259,7 +256,7 @@ public class BasecampApi {
 		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		return new Person.Builder(root).build();
+		return new PersonBuilder(root).build();
 	}
 	
 	/**
@@ -274,7 +271,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Person person = new Person.Builder(e).build();
+			Person person = new PersonBuilder(e).build();
 			resultList.add(person);
 		}
 		return resultList;
@@ -293,7 +290,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Person person = new Person.Builder(e).build();
+			Person person = new PersonBuilder(e).build();
 			resultList.add(person);
 		}
 		return resultList;
@@ -312,7 +309,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Person person = new Person.Builder(e).build();
+			Person person = new PersonBuilder(e).build();
 			resultList.add(person);
 		}
 		return resultList;
@@ -328,7 +325,7 @@ public class BasecampApi {
 		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		return new Person.Builder(root).build();
+		return new PersonBuilder(root).build();
 	}
 
 	public List<Attachment> getFiles(Project project) {
@@ -339,7 +336,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Attachment attachment = new Attachment.Builder(e).build();
+			Attachment attachment = new AttachmentBuilder(e).build();
 			resultList.add(attachment);
 		}
 		return resultList;
@@ -358,7 +355,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Post post = new Post.Builder(e).build();
+			Post post = new PostBuilder(e).build();
 			resultList.add(post);
 		}
 		return resultList;
@@ -374,7 +371,7 @@ public class BasecampApi {
 		InputStream httpStream = doGet(uri);
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		return new Post.Builder(root).build();
+		return new PostBuilder(root).build();
 	}
 	
 	/**
@@ -391,7 +388,7 @@ public class BasecampApi {
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
-			Post post = new Post.Builder(e).build();
+			Post post = new PostBuilder(e).build();
 			resultList.add(post);
 		}
 		return resultList;
@@ -410,11 +407,13 @@ public class BasecampApi {
 	// -- Http helper methods
 	
 	private URI createURI(String path) {
+		URI uri = null;
 		try {
-			return URIUtils.createURI("https", host, -1, path, null, null);
+			uri = URIUtils.createURI("https", host, -1, path, null, null);
 		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
+			onCaughtException(e);
 		}
+		return uri;
 	}
 
 	private InputStream doGet(URI uri) {
@@ -450,58 +449,44 @@ public class BasecampApi {
 	}
 	
 	private InputStream doMethod(HttpUriRequest request) {
+		InputStream httpStream = null;
 		try {
 			HttpResponse response = httpclient.execute(request);
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() != HttpStatus.SC_OK 
 					&& statusLine.getStatusCode() != HttpStatus.SC_CREATED) {
-				throw new RuntimeException(statusLine.getStatusCode() + " - " + statusLine.getReasonPhrase());
+				raiseIllegalState(statusLine.getStatusCode() + " - " + statusLine.getReasonPhrase());
 			}
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
-				return entity.getContent();
-			} else {
-				return null;
+				httpStream  = entity.getContent();
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			onCaughtException(e);
 		}
+		return httpStream;
+	}
+	
+	// -- Exception handling
+	
+	private void onCaughtException(Exception e) {
+		throw new RuntimeException(e);
+	}
+	
+	private void raiseIllegalState(String reason) {
+		throw new IllegalStateException(reason);
 	}
 	
 	// -- JDOM helper method
 	
 	private Document buildDocument(InputStream in) {
+		Document document = null;
 		try {
-			return saxBuilder.build(in);
+			document = saxBuilder.build(in);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			onCaughtException(e);
 		}
+		return document;
 	}
 	
-	// -- Date and time helper methods
-
-	public static Date parseISODate(String source) {
-		try {
-			return isodate.parse(source);
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static String formatISODate(Date date) {
-		return isodate.format(date);
-	}
-
-	public static Date parseISODateTime(String source) {
-		try {
-			return isodatetime.parse(source);
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static String formatISODateTime(Date date) {
-		return isodatetime.format(date);
-	}
-
 }

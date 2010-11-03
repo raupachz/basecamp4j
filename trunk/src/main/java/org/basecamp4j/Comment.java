@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.jdom.Element;
 
 /*
  * Copyright 2010 Björn Raupach
@@ -35,104 +34,6 @@ public class Comment implements Serializable {
 	private Date createdAt;
 	private Long attachmentsCount;
 	private List<Attachment> attachments;
-	
-	public static class Builder {
-		
-		private final Comment comment;
-		
-		public Builder() {
-			this.comment = new Comment();
-		}
-		
-		public Builder(Element element) {
-			this();
-			id(element.getChildText("id"));
-			authorId(element.getChildText("author-id"));
-			authorName(element.getChildText("author-name"));
-			commentableId(element.getChildText("commentable-id"));
-			commentableType(element.getChildText("commentable-type"));
-			body(element.getChildText("body"));
-			emailedFrom(element.getChildText("emailed-from"));
-			createdAt(element.getChildText("created-at"));
-			attachmentsCount(element.getChildText("attachments-count"));
-		}
-		
-		public Builder id(Long id) {
-			this.comment.setId(id);
-			return this;
-		}
-		
-		public Builder id(String id) {
-			this.comment.setId(Long.valueOf(id));
-			return this;
-		}
-		
-		public Builder authorId(Long authorId) {
-			this.comment.setAuthorId(authorId);
-			return this;
-		}
-		
-		public Builder authorId(String authorId) {
-			this.comment.setAuthorId(Long.valueOf(authorId));
-			return this;
-		}
-		
-		public Builder authorName(String authorName) {
-			this.comment.setAuthorName(authorName);
-			return this;
-		}
-		
-		public Builder commentableId(Long commentableId) {
-			this.comment.setCommentableId(commentableId);
-			return this;
-		}
-		
-		public Builder commentableId(String commentableId) {
-			this.comment.setCommentableId(Long.valueOf(commentableId));
-			return this;
-		}
-		
-		public Builder commentableType(String commentableType) {
-			this.comment.setCommentableType(commentableType);
-			return this;
-		}
-		
-		public Builder body(String body) {
-			this.comment.setBody(body);
-			return this;
-		}
-		
-		public Builder emailedFrom(String emailedFrom) {
-			this.comment.setEmailedFrom(emailedFrom);
-			return this;
-		}
-		
-		public Builder createdAt(Date createdAt) {
-			this.comment.setCreatedAt(createdAt);
-			return this;
-		}
-		
-		public Builder createdAt(String createdAt) {
-			this.comment.setCreatedAt(BasecampApi.parseISODateTime(createdAt));
-			return this;
-		}
-		
-		public Builder attachmentsCount(Long attachmentsCount) {
-			this.comment.setAttachmentsCount(attachmentsCount);
-			return this;
-		}
-		
-		public Builder attachmentsCount(String attachmentsCount) {
-			this.comment.setAttachmentsCount(Long.valueOf(attachmentsCount));
-			return this;
-		}
-		
-		public Comment build() {
-			return comment;
-		}
-		
-	}
-	
 	
 	public Long getId() {
 		return id;

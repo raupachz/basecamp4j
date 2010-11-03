@@ -3,7 +3,6 @@ package org.basecamp4j;
 import java.io.Serializable;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.jdom.Element;
 
 /*
  * Copyright 2010 Björn Raupach
@@ -36,117 +35,6 @@ public class Company implements Serializable {
 	private String timeZoneId;
 	private Boolean canSeePrivate;
 	private String urlName;
-	
-	public static class Builder {
-		
-		private final Company company;
-		
-		public Builder() {
-			this.company = new Company();
-		}
-		
-		public Builder(Element element) {
-			this();
-			id(element.getChildText("id"));
-			name(element.getChildText("name"));
-			addressOne(element.getChildText("address-one"));
-			addressTwo(element.getChildText("address-two"));
-			city(element.getChildText("city"));
-			state(element.getChildText("state"));
-			zip(element.getChildText("zip"));
-			country(element.getChildText("country"));
-			webAddress(element.getChildText("web-address"));
-			phoneNumberOffice(element.getChildText("phone-number-office"));
-			phoneNumberFax(element.getChildText("phone-number-fax"));
-			timeZoneId(element.getChildText("time-zone-id"));
-			canSeePrivate(element.getChildText("can-see-private"));
-			urlName(element.getChildText("url-name"));
-		}
-		
-		public Builder id(Long id) {
-			this.company.setId(id);
-			return this;
-		}
-		
-		public Builder id(String id) {
-			this.company.setId(Long.valueOf(id));
-			return this;
-		}
-		
-		public Builder name(String name) {
-			this.company.setName(name);
-			return this;
-		}
-		
-		public Builder addressOne(String addressOne) {
-			this.company.setAddressOne(addressOne);
-			return this;
-		}
-		
-		public Builder addressTwo(String addressTwo) {
-			this.company.setAddressTwo(addressTwo);
-			return this;
-		}
-		
-		public Builder city(String city) {
-			this.company.setCity(city);
-			return this;
-		}
-		
-		public Builder state(String state) {
-			this.company.setState(state);
-			return this;
-		}
-		
-		public Builder zip(String zip) {
-			this.company.setZip(zip);
-			return this;
-		}
-		
-		public Builder country(String country) {
-			this.company.setCountry(country);
-			return this;
-		}
-		
-		public Builder webAddress(String webAddress) {
-			this.company.setWebAddress(webAddress);
-			return this;
-		}
-		
-		public Builder phoneNumberOffice(String phoneNumberOffice) {
-			this.company.setPhoneNumberOffice(phoneNumberOffice);
-			return this;
-		}
-		
-		public Builder phoneNumberFax(String phoneNumberFax) {
-			this.company.setPhoneNumberFax(phoneNumberFax);
-			return this;
-		}
-		
-		public Builder timeZoneId(String timeZoneId) {
-			this.company.setTimeZoneId(timeZoneId);
-			return this;
-		}
-		
-		public Builder canSeePrivate(Boolean canSeePrivate) {
-			this.company.setCanSeePrivate(canSeePrivate);
-			return this;
-		}
-		
-		public Builder canSeePrivate(String canSeePrivate) {
-			this.company.setCanSeePrivate(Boolean.valueOf(canSeePrivate));
-			return this;
-		}
-		
-		public Builder urlName(String urlName) {
-			this.company.setUrlName(urlName);
-			return this;
-		}
-		
-		public Company build() {
-			return company;
-		}
-	}
 	
 	public Long getId() {
 		return id;
