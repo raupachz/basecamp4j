@@ -3,9 +3,7 @@ package org.basecamp4j;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.jdom.Element;
 
 /*
  * Copyright 2010 Björn Raupach
@@ -75,72 +73,6 @@ public class Project implements Serializable {
 	
 	public void setStatus(String status) {
 		this.status = status;
-	}
-	
-	public static class Builder {
-		
-		private final Project project;
-		
-		public Builder() {
-			this.project = new Project();
-		}
-		
-		public Builder(Element element) {
-			this();
-			id(element.getChildText("id"));
-			createdOn(element.getChildText("created-on"));
-			lastChangedOn(element.getChildText("last-changed-on"));
-			name(element.getChildText("name"));
-			status(element.getChildText("status"));
-		}
-		
-		public Builder id(Long id) {
-			this.project.setId(id);
-			return this;
-		}
-		
-		public Builder id(String id) {
-			this.project.setId(Long.valueOf(id));
-			return this;
-		}
-		
-		public Builder createdOn(Date createdOn) {
-			this.project.setCreatedOn(createdOn);
-			return this;
-		}
-		
-		public Builder createdOn(String createdOn) {
-			if (StringUtils.isNotBlank(createdOn)) {
-				this.project.setCreatedOn(BasecampApi.parseISODate(createdOn));
-			}
-			return this;
-		}
-		
-		public Builder lastChangedOn(Date lastChangedOn) {
-			this.project.setLastChangedOn(lastChangedOn);
-			return this;
-		}
-		
-		public Builder lastChangedOn(String lastChangedOn) {
-			if (StringUtils.isNotBlank(lastChangedOn)) {
-				this.project.setLastChangedOn(BasecampApi.parseISODateTime(lastChangedOn));
-			}
-			return this;
-		}
-		
-		public Builder name(String name) {
-			this.project.setName(name);
-			return this;
-		}
-		
-		public Builder status(String status) {
-			this.project.setStatus(status);
-			return this;
-		}
-		
-		public Project build() {
-			return project;
-		}
 	}
 	
 	public Company getCompany() {
