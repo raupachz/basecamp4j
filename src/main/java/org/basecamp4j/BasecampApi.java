@@ -228,7 +228,7 @@ public class BasecampApi {
 	 * Deletes the category. Note that only categories without elements can be deleted.
 	 * @param category
 	 */
-	public void deleteCategory(Category category) {
+	public void destroyCategory(Category category) {
 		URI uri = createURI("/categories/" + category.getId() + ".xml");
 		doDelete(uri);
 	}
@@ -392,6 +392,29 @@ public class BasecampApi {
 			resultList.add(post);
 		}
 		return resultList;
+	}
+	
+	public void createMessage(Project project, String title, String body) {
+		URI uri = createURI("/projects/" + project.getId() + "/posts.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<request>");
+		sb.append("<post>");
+		sb.append("  <title>").append(title).append("</title>");
+		sb.append("  <body>").append(body).append("</body>");
+		sb.append("</post>");
+		sb.append("</request>");
+		
+		doPost(uri, sb.toString());
+	}
+	
+	/**
+	 * Destroys the given message and all of its associated comments.
+	 * @param post
+	 */
+	public void destroyMessage(Post post) {
+		URI uri = createURI("/posts/" + post.getId() + ".xml");
+		doDelete(uri);
 	}
 	
 	/**
