@@ -394,6 +394,10 @@ public class BasecampApi {
 		return resultList;
 	}
 	
+	public void editMessage(Post post) {
+		
+	}
+	
 	public void createMessage(Project project, String title, String body) {
 		URI uri = createURI("/projects/" + project.getId() + "/posts.xml");
 		
@@ -418,6 +422,60 @@ public class BasecampApi {
 	}
 	
 	/**
+	 * Return a list of the 50 most recent comments associated with the specified resource.
+	 */
+	public List<Comment> getRecentComments(Resource resource, Long resourceId) {
+		List<Comment> resultList = new ArrayList<Comment>();
+		URI uri = createURI("/" + resource  +  "/" + resourceId + "/comments.xml");
+		InputStream httpStream = doGet(uri);
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element e = (Element) it.next();
+			Comment comment = new CommentBuilder(e).build();
+			resultList.add(comment);
+		}
+		return resultList;
+	}
+	
+	/**
+	 * Retrieve a specific comment by its id.
+	 */
+	public Comment getComment(Long id) {
+		URI uri = createURI("/comments/" + id + ".xml");
+		InputStream httpStream = doGet(uri);
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		return new CommentBuilder(root).build();
+	}
+	
+	/**
+	 * Create a new comment, associating it with a specific resource.
+	 * @param resource posts, milestones, or todo_items
+	 * @param resourceId
+	 * @param comment
+	 */
+	public void createComment(Resource resource, Long resourceId, String comment) {
+		URI uri = createURI("/" + resource  +  "/" + resourceId + "/comments.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<comment>");
+		sb.append("  <body>").append(comment).append("</body>");
+		sb.append("</comment>");
+		
+		doPost(uri, sb.toString());
+	}
+	
+	/**
+	 * Delete the comment with the given ID.
+	 * @param comment
+	 */
+	public void destroyComment(Comment comment) {
+		URI uri = createURI("/comments/" + comment.getId() + ".xml");
+		doDelete(uri);
+	}
+	
+	/**
 	 * Shut down connection and release allocated system resources. Be sure to call
 	 * this method when you are done using the API.
 	 */
@@ -426,7 +484,7 @@ public class BasecampApi {
 			httpclient.getConnectionManager().shutdown();
 		}
 	}
-
+	
 	// -- Http helper methods
 	
 	private URI createURI(String path) {
