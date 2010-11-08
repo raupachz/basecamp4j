@@ -60,7 +60,7 @@ abstract class AbstractResourceBuilder<T> {
 	}
 	
 	protected void onCaughtException(Exception e) {
-		throw new RuntimeException(e);
+		throw new IllegalStateException(e);
 	}
 
 }
