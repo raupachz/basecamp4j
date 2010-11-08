@@ -30,6 +30,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+import org.junit.runner.Request;
 
 /*
  * Copyright 2010 Björn Raupach
@@ -424,7 +425,7 @@ public class BasecampApi {
 	/**
 	 * Return a list of the 50 most recent comments associated with the specified resource.
 	 */
-	public List<Comment> getRecentComments(Resource resource, Long resourceId) {
+	public List<Comment> getComments(Resource resource, Long resourceId) {
 		List<Comment> resultList = new ArrayList<Comment>();
 		URI uri = createURI("/" + resource  +  "/" + resourceId + "/comments.xml");
 		InputStream httpStream = doGet(uri);
@@ -473,6 +474,40 @@ public class BasecampApi {
 	public void destroyComment(Comment comment) {
 		URI uri = createURI("/comments/" + comment.getId() + ".xml");
 		doDelete(uri);
+	}
+	
+	/**
+	 * This lets you query the list of milestones for a project. 
+	 * You can either return all milestones, or only those that 
+	 * are late, completed, or upcoming.
+	 * @param project
+	 * @return
+	 */
+	public List<Milestone> getMilestones(Project project) {
+		List<Milestone> resultList = new ArrayList<Milestone>();
+		URI uri = createURI("/projects/" + project.getId() + "/milestones/list.xml");
+		InputStream httpStream = doGet(uri);
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element e = (Element) it.next();
+			Milestone milestone = new MilestoneBuilder(e).build();
+			resultList.add(milestone);
+		}
+		return resultList;
+	}
+	
+	/**
+	 * Marks the specified milestone as complete.
+	 * @param milestone
+	 * @return
+	 */
+	public Milestone completeMilestone(Milestone milestone) {
+		URI uri = createURI("/milestones/complete/" + milestone.getId());
+		InputStream httpStream = doGet(uri);
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		return new MilestoneBuilder(root).build();
 	}
 	
 	/**
