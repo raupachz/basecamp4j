@@ -5,10 +5,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,7 +27,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
-import org.junit.runner.Request;
 
 /*
  * Copyright 2010 Björn Raupach
@@ -511,6 +507,46 @@ public class BasecampApi {
 	}
 	
 	/**
+	 * Returns a list of todo-list records
+	 * @return todo-lists
+	 */
+	public List<TodoList> getTodoLists() {
+		List<TodoList> resultList = new ArrayList<TodoList>();
+		URI uri = createURI("/todo_lists.xml");
+		InputStream httpStream = doGet(uri);
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element e = (Element) it.next();
+			TodoList list = new TodoListBuilder(e).build();
+			resultList.add(list);
+		}
+		return resultList;
+	}
+	
+	public List<TodoList> getTodoLists(Project project) {
+		List<TodoList> resultList = new ArrayList<TodoList>();
+		URI uri = createURI("/projects/" + project.getId() + "/todo_lists.xml");
+		InputStream httpStream = doGet(uri);
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element e = (Element) it.next();
+			TodoList list = new TodoListBuilder(e).build();
+			resultList.add(list);
+		}
+		return resultList;
+	}
+	
+	public TodoList getTodoList(Long id) {
+		URI uri = createURI("/todo_lists/" + id + ".xml");
+		InputStream httpStream = doGet(uri);
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		return new TodoListBuilder(root).build();
+	}
+	
+	/**
 	 * Shut down connection and release allocated system resources. Be sure to call
 	 * this method when you are done using the API.
 	 */
@@ -604,5 +640,5 @@ public class BasecampApi {
 		}
 		return document;
 	}
-	
+
 }

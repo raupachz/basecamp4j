@@ -3,7 +3,6 @@ package org.basecamp4j;
 import java.util.Date;
 
 import org.jdom.Element;
-import org.junit.internal.matchers.IsCollectionContaining;
 
 /*
  * Copyright 2010 Björn Raupach
