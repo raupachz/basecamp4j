@@ -577,8 +577,6 @@ public class BasecampApi {
 		try {
 			StringEntity entity = new StringEntity(request, "UTF-8");
 			HttpPost httppost = new HttpPost(uri);
-			httppost.addHeader("Accept", "application/xml");
-			httppost.addHeader("Content-Type", "application/xml");
 			httppost.setEntity(entity);
 			doMethod(httppost);
 		} catch (UnsupportedEncodingException ignore) {}
@@ -588,8 +586,6 @@ public class BasecampApi {
 		try {
 			StringEntity entity = new StringEntity(request, "UTF-8");
 			HttpPut httpput = new HttpPut(uri);
-			httpput.addHeader("Accept", "application/xml");
-			httpput.addHeader("Content-Type", "application/xml");
 			httpput.setEntity(entity);
 			doMethod(httpput);
 		} catch (UnsupportedEncodingException ignore) {}
@@ -601,13 +597,13 @@ public class BasecampApi {
 	}
 	
 	private InputStream doMethod(HttpUriRequest request) {
+		appendHttpHeader(request);
 		InputStream httpStream = null;
 		try {
 			HttpResponse response = httpclient.execute(request);
 			StatusLine statusLine = response.getStatusLine();
-			if (statusLine.getStatusCode() != HttpStatus.SC_OK 
-					&& statusLine.getStatusCode() != HttpStatus.SC_CREATED) {
-				raiseIllegalState(statusLine.getStatusCode() + " - " + statusLine.getReasonPhrase());
+			if (hasInvalidStatusCode(statusLine)) {
+				raiseIllegalState(statusLine);
 			}
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
@@ -619,14 +615,24 @@ public class BasecampApi {
 		return httpStream;
 	}
 	
+	private void appendHttpHeader(HttpUriRequest request) {
+		request.addHeader("Accept", "application/xml");
+		request.addHeader("Content-Type", "application/xml");
+	}
+	
+	private boolean hasInvalidStatusCode(StatusLine statusLine) {
+		return statusLine.getStatusCode() != HttpStatus.SC_OK 
+				&& statusLine.getStatusCode() != HttpStatus.SC_CREATED;
+	}
+	
 	// -- Exception handling
 	
 	private void onCaughtException(Exception e) {
 		throw new RuntimeException(e);
 	}
 	
-	private void raiseIllegalState(String reason) {
-		throw new IllegalStateException(reason);
+	private void raiseIllegalState(StatusLine statusLine) {
+		throw new IllegalStateException(statusLine.getStatusCode() + " - " + statusLine.getReasonPhrase());
 	}
 	
 	// -- JDOM helper method
