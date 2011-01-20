@@ -1,8 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>org.basecamp4j</groupId>
   <artifactId>basecamp4j</artifactId>
   <version>0.1</version>
@@ -33,39 +31,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-      <plugin>
-      	<groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.7</version>
- 		<configuration />
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-    <finalName>basecamp4j</finalName>
-  </build>
-
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -96,6 +61,137 @@
     </dependency>
   </dependencies>
   
+  <build>
+  	<finalName>basecamp4j</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-source-plugin</artifactId>
+		<executions>
+		  <execution>
+			<id>attach-sources</id>
+			  <goals>
+				<goal>jar</goal>
+			  </goals>
+		  </execution>
+		</executions>
+	  </plugin>
+      <plugin>
+      	<groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+ 		<configuration />
+      </plugin>
+      <plugin>
+		<artifactId>maven-assembly-plugin</artifactId>
+		<version>2.2-beta-2</version>
+		  <executions>
+			<execution>
+			  <id>assemble-zip</id>
+			  <phase>package</phase>
+			  <goals>
+				<goal>single</goal>
+			  </goals>
+			</execution>
+		  </executions>
+		  <configuration>
+			<descriptors>
+			  <descriptor>maven-assembly-dist.xml</descriptor>
+			</descriptors>
+		  </configuration>
+	  </plugin>
+	  <plugin>
+	  	<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-release-plugin</artifactId>
+		<version>2.0-beta-7</version>
+	  </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <profiles>
+	<profile>
+	<id>release-sign-artifacts</id>
+	<activation>
+	  <property>
+		<name>performRelease</name>
+		<value>true</value>
+	  </property>
+	</activation>
+
+	<properties>
+	  <gpg.keyname>3867215D</gpg.keyname>	<!-- GPG Key ID to use for signing -->
+	  <release.username>raupach.bjoern</release.username> <!-- username for our svn repository -->
+	</properties>
+
+	<build>
+	  <plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-gpg-plugin</artifactId>
+			<version>1.0-alpha-4</version>
+			<executions>
+			  <execution>
+				<id>sign-artifacts</id>
+				<phase>verify</phase>
+				  <goals>
+					<goal>sign</goal>
+				</goals>
+			  </execution>
+			</executions>
+		</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-javadoc-plugin</artifactId>
+			<executions>
+			  <execution>
+				<id>attach-javadocs</id>
+				<goals>
+					<goal>jar</goal>
+				</goals>
+			  </execution>
+			</executions>
+		</plugin>
+	  </plugins>
+	</build>
+	</profile>
+	<profile>
+	  <id>include-sources</id>
+	  <build>
+		<resources>
+		  <resource>
+			<targetPath>/</targetPath>
+			<filtering>true</filtering>
+			<directory>src/main/java</directory>
+			<includes>
+			  <include>**/*.java</include>
+			</includes>
+		  </resource>
+		</resources>
+	  </build>
+	</profile>
+  </profiles>
+
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
