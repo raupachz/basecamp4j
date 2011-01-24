@@ -84,6 +84,11 @@ class HttpConnection {
 		}
 	}
 	
+	public void doPost(URI uri) {
+		HttpPost httppost = new HttpPost(uri);
+		doMethod(httppost);
+	}
+	
 	public void doPut(URI uri, String request) {
 		try {
 			StringEntity entity = new StringEntity(request, "UTF-8");
@@ -93,6 +98,11 @@ class HttpConnection {
 		} catch (UnsupportedEncodingException e) {
 			onCaughtException(e);
 		}
+	}
+	
+	public void doPut(URI uri) {
+		HttpPut httpput = new HttpPut(uri);
+		doMethod(httpput);
 	}
 	
 	public void doDelete(URI uri) {

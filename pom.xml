@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.basecamp4j</groupId>
   <artifactId>basecamp4j</artifactId>
-  <version>0.1</version>
+  <version>0.9</version>
   <packaging>jar</packaging>
 
   <name>basecamp4j</name>
-  <description>basecamp4j is an unoffical Java library for the Basecamp API</description>
+  <description>basecamp4j is a Java wrapper library for the Basecamp REST API</description>
   <url>http://code.google.com/p/basecamp4j</url>
   <licenses>
     <license>

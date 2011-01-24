@@ -2,7 +2,9 @@ package org.basecamp4j;
 
 import java.io.InputStream;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -389,12 +391,81 @@ public class BasecampApi {
 	/**
 	 * Marks the specified milestone as complete.
 	 * @param milestone
-	 * @return
+	 * @return 
 	 */
-	public Milestone completeMilestone(Milestone milestone) {
+	public void completeMilestone(Milestone milestone) {
 		URI uri = httpConnection.createURI("/milestones/complete/" + milestone.getId());
-		InputStream httpStream = httpConnection.doGet(uri);
-		return factory.buildMilestone(httpStream);
+		httpConnection.doPut(uri);
+	}
+	
+	/**
+	 * Marks the specified milestone as uncomplete.
+	 * @param milestone
+	 */
+	public void uncompleteMilestone(Milestone milestone) {
+		URI uri = httpConnection.createURI("/milestones/uncomplete/" + milestone.getId());
+		httpConnection.doPut(uri);
+	}
+	
+	/**
+	 * Creates a single milestone.
+	 * @param project
+	 * @param title
+	 * @param deadline
+	 * @param responsiblePerson
+	 * @param notify
+	 */
+	public void createMilestone(Project project, String title, Date deadline, Person responsiblePerson,  boolean notify) {
+		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/milestones/create");
+		
+		SimpleDateFormat isodate = new SimpleDateFormat("yyyy-MM-dd");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<request>");
+		sb.append("<milestone>");
+		sb.append("<title>").append(title).append("</title>");
+		sb.append("<deadline>").append(isodate.format(deadline)).append("</deadline>");
+		sb.append("<responsible-party>").append(responsiblePerson.getId()).append("</responsible-party>");
+		sb.append("<notify>").append(notify).append("</notify>");
+		sb.append("</milestone>");
+		sb.append("</request>");
+		
+		httpConnection.doPost(uri, sb.toString());
+	}
+	
+	/**
+	 * Deletes the given milestone from the project.
+	 * @param milestone
+	 */
+	public void deleteMilestone(Milestone milestone) {
+		URI uri = httpConnection.createURI("/milestones/delete/" + milestone.getId());
+		httpConnection.doPost(uri);
+	}
+	
+	/**
+	 * Creates a single milestone.
+	 * @param project
+	 * @param title
+	 * @param deadline
+	 * @param responsibleCompany
+	 * @param notify
+	 */
+	public void createMilestone(Project project, String title, Date deadline, Company responsibleCompany,  boolean notify) {
+		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/milestones/create");
+		
+		SimpleDateFormat isodate = new SimpleDateFormat("yyyy-MM-dd");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<request>");
+		sb.append("<milestone>");
+		sb.append("<title>").append(title).append("</title>");
+		sb.append("<deadline>").append(isodate.format(deadline)).append("</deadline>");
+		sb.append("<responsible-party>").append("c" + responsibleCompany.getId()).append("</responsible-party>");
+		sb.append("<notify>").append(notify).append("</notify>");
+		sb.append("</milestone>");
+		sb.append("</request>");
+		
+		httpConnection.doPost(uri, sb.toString());
 	}
 	
 	/**
