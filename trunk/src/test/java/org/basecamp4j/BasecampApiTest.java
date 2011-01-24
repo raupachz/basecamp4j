@@ -44,31 +44,31 @@ public class BasecampApiTest {
 		api.dispose();
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetAccount() {
 		Account account = api.getAccount();
 		assertNotNull(account);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetProjects() {
 		List<Project> projects = api.getProjects();
 		assertNotNull(projects);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetCurrentPerson() {
 		Person person = api.getCurrentPerson();
 		assertNotNull(person);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetPeople() {
 		List<Person> people = api.getPeople();
 		assertNotNull(people);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetPeopleOfProject() {
 		Project project = api.getProject(projectId);
 		List<Person> people = api.getPeople(project);
@@ -99,7 +99,7 @@ public class BasecampApiTest {
 		api.destroyCategory(category);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetCategoriesOfProject() {
 		Project project = api.getProject(projectId);
 		List<Category> categories = api.getCategories(project);
@@ -112,7 +112,7 @@ public class BasecampApiTest {
 		api.createCategory(project, "Testkategorie", "post");
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testCreateMessge() {
 		Project project = api.getProject(projectId);
 		api.createMessage(project, "Test " + new Date().toString(), "Test " + new Date().toString());
@@ -132,24 +132,35 @@ public class BasecampApiTest {
 		api.createComment(Resource.posts, 38637044L, comment);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetMilestones() {
 		Project project = api.getProject(projectId);
 		List<Milestone> milestones = api.getMilestones(project);
 		assertNotNull(milestones);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetTodoLists() {
 		List<TodoList> todos = api.getTodoLists();
 		assertNotNull(todos);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testGetTodoListsByProject() {
 		Project project = api.getProject(projectId);
 		List<TodoList> todos = api.getTodoLists(project);
 		assertNotNull(todos);
+	}
+	
+	@Test @Ignore
+	public void testProjectCounts() {
+		ProjectCounts counts = api.getProjectCounts();
+		assertNotNull(counts);
+	}
+	
+	@Test
+	public void testCreateProject() {
+		api.createProject("Mein neues Projekt");
 	}
 	
 	
