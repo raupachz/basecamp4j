@@ -40,6 +40,11 @@ public class BasecampApi {
 		this.factory = new ResourceFactory();
 	}
 
+	/**
+	 * Returns info about the current Basecamp account, its subscription, 
+	 * and the default post and attachment categories. 
+	 * @return info about the current Basecamp account
+	 */
 	public Account getAccount() {
 		URI uri = httpConnection.createURI("/account.xml");
 		InputStream httpStream = httpConnection.doGet(uri);
@@ -58,6 +63,18 @@ public class BasecampApi {
 		InputStream httpStream = httpConnection.doGet(uri);
 		return factory.buildProject(httpStream);
 	}
+	
+	/**
+	 * Returns a count of all projects, by project status. If there are no
+	 * projects with a particular status, that status entry will be
+	 * omitted from the report.
+	 * @return count of all projects
+	 */
+	public ProjectCounts getProjectCounts() {
+		URI uri = httpConnection.createURI("/projects/count.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return factory.buildProjectCounts(httpStream);
+	}
 
 	/**
 	 * Returns all accessible projects. This includes active, inactive, and
@@ -69,6 +86,23 @@ public class BasecampApi {
 		URI uri = httpConnection.createURI("/projects.xml");
 		InputStream httpStream = httpConnection.doGet(uri);
 		return factory.buildProjects(httpStream);
+	}
+	
+	/**
+	 * Creates a new project with the given name.
+	 * @param name name of the new project
+	 */
+	public void createProject(String name) {
+		URI uri = httpConnection.createURI("/projects.xml");
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<request>");
+		sb.append("<project>");
+		sb.append("<name>").append(name).append("</name>");
+		sb.append("</project>");
+		sb.append("</request>");
+		
+		httpConnection.doPost(uri, sb.toString());
 	}
 
 	/**

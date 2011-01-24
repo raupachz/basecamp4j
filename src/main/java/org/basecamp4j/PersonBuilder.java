@@ -55,8 +55,7 @@ class PersonBuilder extends AbstractResourceBuilder<Person> {
 	}
 	
 	public PersonBuilder id(String id) {
-		this.person.setId(Long.valueOf(id));
-		return this;
+		return id(Long.valueOf(id));
 	}
 	
 	public PersonBuilder firstname(String firstname) {

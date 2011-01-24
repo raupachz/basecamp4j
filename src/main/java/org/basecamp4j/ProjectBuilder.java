@@ -25,7 +25,6 @@ class ProjectBuilder extends AbstractResourceBuilder<Project> {
 	private final Project project;
 	
 	public ProjectBuilder() {
-		super();
 		this.project = new Project();
 	}
 	
@@ -44,8 +43,7 @@ class ProjectBuilder extends AbstractResourceBuilder<Project> {
 	}
 	
 	public ProjectBuilder id(String id) {
-		this.project.setId(Long.valueOf(id));
-		return this;
+		return id(Long.valueOf(id));
 	}
 	
 	public ProjectBuilder createdOn(Date createdOn) {

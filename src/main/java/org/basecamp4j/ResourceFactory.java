@@ -41,6 +41,12 @@ class ResourceFactory {
 		Element root = document.getRootElement();
 		return new ProjectBuilder(root).build();
 	}
+	
+	public ProjectCounts buildProjectCounts(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		return new ProjectCountsBuilder(root).build();
+	}
 
 	public List<Project> buildProjects(InputStream httpStream) {
 		List<Project> resultList = new ArrayList<Project>();
@@ -191,6 +197,5 @@ class ResourceFactory {
 		Element root = document.getRootElement();
 		return new TodoListBuilder(root).build();
 	}
-	
 
 }
