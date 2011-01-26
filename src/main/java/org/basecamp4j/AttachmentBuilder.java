@@ -141,7 +141,7 @@ class AttachmentBuilder extends AbstractResourceBuilder<Attachment> {
 	}
 	
 	public AttachmentBuilder createdOn(String createdOn) {
-		this.attachment.setCreatedOn(parseISODateTime(createdOn));
+		this.attachment.setCreatedOn(IsoDateTimeFormat.parseDateTime(createdOn));
 		return this;
 	}
 	

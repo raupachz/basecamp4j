@@ -62,7 +62,7 @@ class AbbreviatedPostBuilder extends AbstractResourceBuilder<AbbreviatedPost> {
 	}
 	
 	public AbbreviatedPostBuilder postedOn(String postedOn) {
-		this.post.setPostedOn(parseISODateTime(postedOn));
+		this.post.setPostedOn(IsoDateTimeFormat.parseDateTime(postedOn));
 		return this;
 	}
 	

@@ -78,7 +78,7 @@ class PostBuilder extends AbstractResourceBuilder<Post> {
 	}
 	
 	public PostBuilder postedOn(String postedOn) {
-		this.post.setPostedOn(parseISODateTime(postedOn));
+		this.post.setPostedOn(IsoDateTimeFormat.parseDateTime(postedOn));
 		return this;
 	}
 	

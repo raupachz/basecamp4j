@@ -97,7 +97,7 @@ class CommentBuilder extends AbstractResourceBuilder<Comment>{
 	}
 	
 	public CommentBuilder createdAt(String createdAt) {
-		this.comment.setCreatedAt(parseISODateTime(createdAt));
+		this.comment.setCreatedAt(IsoDateTimeFormat.parseDateTime(createdAt));
 		return this;
 	}
 	

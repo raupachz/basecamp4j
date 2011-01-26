@@ -70,7 +70,7 @@ class MilestoneBuilder extends AbstractResourceBuilder<Milestone>{
 	}
 	
 	public MilestoneBuilder deadline(String deadline) {
-		this.milestone.setDeadline(parseISODate(deadline));
+		this.milestone.setDeadline(IsoDateTimeFormat.parseDate(deadline));
 		return this;
 	}
 	
@@ -100,7 +100,7 @@ class MilestoneBuilder extends AbstractResourceBuilder<Milestone>{
 	}
 	
 	public MilestoneBuilder createdOn(String createdOn) {
-		this.milestone.setCreatedOn(parseISODateTime(createdOn));
+		this.milestone.setCreatedOn(IsoDateTimeFormat.parseDateTime(createdOn));
 		return this;
 	}
 	
@@ -119,13 +119,13 @@ class MilestoneBuilder extends AbstractResourceBuilder<Milestone>{
 		return this;
 	}
 	
-	public MilestoneBuilder responsiblePartyId(Long responsiblePartyId) {
+	public MilestoneBuilder responsiblePartyId(String responsiblePartyId) {
 		this.milestone.setResponsiblePartyId(responsiblePartyId);
 		return this;
 	}
 	
-	public MilestoneBuilder responsiblePartyId(String responsiblePartyId) {
-		this.milestone.setResponsiblePartyId(Long.valueOf(responsiblePartyId));
+	public MilestoneBuilder responsiblePartyId(Long responsiblePartyId) {
+		this.milestone.setResponsiblePartyId(responsiblePartyId.toString());
 		return this;
 	}
 	
@@ -155,7 +155,7 @@ class MilestoneBuilder extends AbstractResourceBuilder<Milestone>{
 	}
 	
 	public MilestoneBuilder completedOn(String completedOn) {
-		this.milestone.setCompletedOn(parseISODateTime(completedOn));
+		this.milestone.setCompletedOn(IsoDateTimeFormat.parseDateTime(completedOn));
 		return this;
 	}
 	
@@ -177,4 +177,5 @@ class MilestoneBuilder extends AbstractResourceBuilder<Milestone>{
 	public Milestone build() {
 		return milestone;
 	}
+	
 }
