@@ -30,7 +30,7 @@ public class Milestone implements Serializable {
 	private Date createdOn;
 	private Long creatorId;
 	private String creatorName;
-	private Long responsiblePartyId;
+	private String responsiblePartyId;
 	private String responsiblePartyType;
 	private String responsiblePartyName;
 	private Long commentsCount;
@@ -102,11 +102,11 @@ public class Milestone implements Serializable {
 		this.creatorName = creatorName;
 	}
 	
-	public Long getResponsiblePartyId() {
+	public String getResponsiblePartyId() {
 		return responsiblePartyId;
 	}
 	
-	public void setResponsiblePartyId(Long responsiblePartyId) {
+	public void setResponsiblePartyId(String responsiblePartyId) {
 		this.responsiblePartyId = responsiblePartyId;
 	}
 	

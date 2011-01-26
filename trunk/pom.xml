@@ -18,7 +18,7 @@
   </licenses>
   <scm>
     <url>scm:svn:https://basecamp4j.googlecode.com/svn/trunk</url>
-    <connection>scm:svn:https://basecamp4j.googlecode.com/svn/trunk</connection>
+    <connection>http://basecamp4j.googlecode.com/svn/trunk/</connection>
   </scm>
   <developers>
     <developer>

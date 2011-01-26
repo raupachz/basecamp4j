@@ -113,12 +113,12 @@ class AccountBuilder extends AbstractResourceBuilder<Account> {
 	}
 	
 	public AccountBuilder updatedAt(String updatedAt) {
-		this.account.setUpdatedAt(parseISODateTime(updatedAt));
+		this.account.setUpdatedAt(IsoDateTimeFormat.parseDateTime(updatedAt));
 		return this;
 	}
 	
 	public AccountBuilder createdAt(String createdAt) {
-		this.account.setCreatedAt(parseISODateTime(createdAt));
+		this.account.setCreatedAt(IsoDateTimeFormat.parseDateTime(createdAt));
 		return this;
 	}
 	

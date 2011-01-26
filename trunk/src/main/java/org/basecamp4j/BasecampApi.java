@@ -5,12 +5,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
 
 /*
  * Copyright 2010 Björn Raupach
@@ -418,13 +413,11 @@ public class BasecampApi {
 	public void createMilestone(Project project, String title, Date deadline, Person responsiblePerson,  boolean notify) {
 		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/milestones/create");
 		
-		SimpleDateFormat isodate = new SimpleDateFormat("yyyy-MM-dd");
-		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
 		sb.append("<milestone>");
 		sb.append("<title>").append(title).append("</title>");
-		sb.append("<deadline>").append(isodate.format(deadline)).append("</deadline>");
+		sb.append("<deadline>").append(IsoDateTimeFormat.formatDate(deadline)).append("</deadline>");
 		sb.append("<responsible-party>").append(responsiblePerson.getId()).append("</responsible-party>");
 		sb.append("<notify>").append(notify).append("</notify>");
 		sb.append("</milestone>");
@@ -453,16 +446,32 @@ public class BasecampApi {
 	public void createMilestone(Project project, String title, Date deadline, Company responsibleCompany,  boolean notify) {
 		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/milestones/create");
 		
-		SimpleDateFormat isodate = new SimpleDateFormat("yyyy-MM-dd");
-		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
 		sb.append("<milestone>");
 		sb.append("<title>").append(title).append("</title>");
-		sb.append("<deadline>").append(isodate.format(deadline)).append("</deadline>");
+		sb.append("<deadline>").append(IsoDateTimeFormat.formatDate(deadline)).append("</deadline>");
 		sb.append("<responsible-party>").append("c" + responsibleCompany.getId()).append("</responsible-party>");
 		sb.append("<notify>").append(notify).append("</notify>");
 		sb.append("</milestone>");
+		sb.append("</request>");
+		
+		httpConnection.doPost(uri, sb.toString());
+	}
+	
+	public void updateMilestone(Milestone milestone, boolean notify, boolean moveUpcomingMilestones, boolean moveUpcomingMilestonesOffWeekends) {
+		URI uri = httpConnection.createURI("/milestones/update/" + milestone.getId());
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append("<request>");
+		sb.append("<milestone>");
+		sb.append("<title>").append(milestone.getTitle()).append("</title>");
+		sb.append("<deadline>").append(IsoDateTimeFormat.formatDate(milestone.getDeadline())).append("</deadline>");
+		sb.append("<responsible-party>").append(milestone.getResponsiblePartyId()).append("</responsible-party>");
+		sb.append("<notify>").append(notify).append("</notify>");
+		sb.append("</milestone>");
+		sb.append("<move-upcoming-milestones>").append(moveUpcomingMilestones).append("</move-upcoming-milestones>");
+		sb.append("<move-upcoming-milestones>").append(moveUpcomingMilestonesOffWeekends).append("</move-upcoming-milestones>");
 		sb.append("</request>");
 		
 		httpConnection.doPost(uri, sb.toString());

@@ -1,5 +1,6 @@
 package org.basecamp4j;
 
+import org.apache.commons.lang.StringUtils;
 import org.jdom.Element;
 
 /*
@@ -33,7 +34,11 @@ class ProjectCountsBuilder extends AbstractResourceBuilder<ProjectCounts>{
 	}
 	
 	public ProjectCountsBuilder active(String active) {
-		return active(Integer.valueOf(active));
+		if (StringUtils.isBlank(active)) {
+			return active(0);
+		} else {
+			return active(Integer.valueOf(active));
+		}
 	}
 	
 	public ProjectCountsBuilder active(Integer active) {
@@ -42,7 +47,11 @@ class ProjectCountsBuilder extends AbstractResourceBuilder<ProjectCounts>{
 	}
 	
 	public ProjectCountsBuilder onHold(String onHold) {
-		return onHold(onHold);
+		if (StringUtils.isBlank(onHold)) {
+			return onHold(0);
+		} else {
+			return onHold(Integer.valueOf(onHold));
+		}
 	}
 	
 	public ProjectCountsBuilder onHold(Integer onHold) {
@@ -51,7 +60,11 @@ class ProjectCountsBuilder extends AbstractResourceBuilder<ProjectCounts>{
 	}
 	
 	public ProjectCountsBuilder archived(String archived) {
-		return archived(Integer.valueOf(archived));
+		if (StringUtils.isBlank(archived)) {
+			return archived(0);
+		} else {
+			return archived(Integer.valueOf(archived));
+		}
 	}
 	
 	public ProjectCountsBuilder archived(Integer archived) {

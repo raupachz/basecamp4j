@@ -152,13 +152,13 @@ public class BasecampApiTest {
 		assertNotNull(todos);
 	}
 	
-	@Test @Ignore
+	@Test
 	public void testProjectCounts() {
 		ProjectCounts counts = api.getProjectCounts();
 		assertNotNull(counts);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testCreateProject() {
 		api.createProject("Mein neues Projekt");
 	}

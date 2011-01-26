@@ -53,7 +53,7 @@ class ProjectBuilder extends AbstractResourceBuilder<Project> {
 	
 	public ProjectBuilder createdOn(String createdOn) {
 		if (StringUtils.isNotBlank(createdOn)) {
-			this.project.setCreatedOn(parseISODate(createdOn));
+			this.project.setCreatedOn(IsoDateTimeFormat.parseDate(createdOn));
 		}
 		return this;
 	}
@@ -65,7 +65,7 @@ class ProjectBuilder extends AbstractResourceBuilder<Project> {
 	
 	public ProjectBuilder lastChangedOn(String lastChangedOn) {
 		if (StringUtils.isNotBlank(lastChangedOn)) {
-			this.project.setLastChangedOn(parseISODateTime(lastChangedOn));
+			this.project.setLastChangedOn(IsoDateTimeFormat.parseDateTime(lastChangedOn));
 		}
 		return this;
 	}

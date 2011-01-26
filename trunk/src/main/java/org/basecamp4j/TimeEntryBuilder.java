@@ -62,7 +62,7 @@ class TimeEntryBuilder extends AbstractResourceBuilder<TimeEntry> {
 	}
 	
 	public TimeEntryBuilder date(String date) {
-		this.timeEntry.setDate(parseISODate(date));
+		this.timeEntry.setDate(IsoDateTimeFormat.parseDate(date));
 		return this;
 	}
 	
