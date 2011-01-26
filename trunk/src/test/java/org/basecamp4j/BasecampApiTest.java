@@ -34,12 +34,12 @@ public class BasecampApiTest {
 		projectId = Long.valueOf(authenticationProperties.getProperty("project-id"));
 	}
 	
-	@Before
+	@Before @Ignore
 	public void setUp() throws IOException {
 		api = new BasecampApi(host , token);
 	}
 	
-	@After
+	@After @Ignore
 	public void tearDown() {
 		api.dispose();
 	}
@@ -139,10 +139,32 @@ public class BasecampApiTest {
 	}
 	
 	@Test @Ignore
+	public void testGetTodoListsByResponsibleParty() {
+		List<TodoList> todos = api.getTodoLists("");
+		assertNotNull(todos);
+	}
+	
+	@Test @Ignore 
 	public void testGetTodoListsByProject() {
 		Project project = api.getProject(projectId);
 		List<TodoList> todos = api.getTodoLists(project);
 		assertNotNull(todos);
+	}
+	
+	@Test @Ignore
+	public void testGetTodoListsByProjectByFilter() {
+		Project project = api.getProject(projectId);
+		List<TodoList> todos = api.getTodoLists(project, Filter.finished);
+	}
+		
+	
+	@Test @Ignore
+	public void testGetTodoList() {
+		TodoList todo = api.getTodoList(11387767l);
+		for (TodoItem item : todo.getTodoItems()) {
+			System.out.println(item);
+		}
+		assertNotNull(todo);
 	}
 	
 	@Test @Ignore
@@ -166,7 +188,7 @@ public class BasecampApiTest {
 		}
 	}
 	
-	@Test 
+	@Test @Ignore
 	public void testCompleteAndUncompleteMilestones() {
 		Project project = api.getProject(projectId);
 		List<Milestone> milestones = api.getMilestones(project);
@@ -174,6 +196,18 @@ public class BasecampApiTest {
 			Milestone milestone = milestones.get(0);
 			api.completeMilestone(milestone);
 			api.uncompleteMilestone(milestone);
+		}
+	}
+	
+	@Test @Ignore
+	public void tesUpdateMilestone() {
+		Project project = api.getProject(projectId);
+		List<Milestone> milestones = api.getMilestones(project);
+		if (milestones.size() > 0) {
+			Milestone milestone = milestones.get(0);
+			milestone.setDeadline(new Date());
+			milestone.setTitle("Milestone heute");
+			api.updateMilestone(milestone, false, false, false);
 		}
 	}
 	

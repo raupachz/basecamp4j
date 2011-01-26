@@ -23,12 +23,12 @@ public class TodoItem implements Serializable {
 	private Long id;
 	private Long todoListId;
 	private String content;
-	private Long position;
+	private Integer position;
 	private Date createdOn;
 	private Long creatorId;
 	private String creatorName;
 	private Boolean completed;
-	private Long commentsCount;
+	private Integer commentsCount;
 	private String responsiblePartyType;
 	private Long responsiblePartyId;
 	private String responsiblePartyName;
@@ -60,11 +60,11 @@ public class TodoItem implements Serializable {
 		this.content = content;
 	}
 	
-	public Long getPosition() {
+	public Integer getPosition() {
 		return position;
 	}
 	
-	public void setPosition(Long position) {
+	public void setPosition(Integer position) {
 		this.position = position;
 	}
 	
@@ -100,11 +100,11 @@ public class TodoItem implements Serializable {
 		this.completed = completed;
 	}
 	
-	public Long getCommentsCount() {
+	public Integer getCommentsCount() {
 		return commentsCount;
 	}
 	
-	public void setCommentsCount(Long commentsCount) {
+	public void setCommentsCount(Integer commentsCount) {
 		this.commentsCount = commentsCount;
 	}
 	

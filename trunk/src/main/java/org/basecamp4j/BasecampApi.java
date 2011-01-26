@@ -486,17 +486,70 @@ public class BasecampApi {
 		return factory.buildTodoLists(httpStream);
 	}
 	
-	public List<TodoList> getTodoLists(Project project) {
-		List<TodoList> resultList = new ArrayList<TodoList>();
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/todo_lists.xml");
+	/**
+	 * Returns a list of todo-list records, with todo-item records 
+	 * that are assigned to the given “responsible party”. If no
+	 * responsible party is given, the current user is assumed to
+	 * be the responsible party. The responsible party may be changed
+	 * by setting the “responsible_party” query parameter to a blank
+	 * string (for unassigned items), a person-id, or a company-id
+	 * prefixed by a “c” (e.g., c1234).
+	 * @param responsibleParty
+	 * @return todo-lists
+	 */
+	public List<TodoList> getTodoLists(String responsibleParty) {
+		URI uri = httpConnection.createURI("/todo_lists.xml?responsible_party=" + responsibleParty);
 		InputStream httpStream = httpConnection.doGet(uri);
 		return factory.buildTodoLists(httpStream);
 	}
 	
+	/**
+	 * Returns a list of todo-list records that are in the given project.
+	 * @param project
+	 * @return
+	 */
+	public List<TodoList> getTodoLists(Project project) {
+		List<TodoList> resultList = new ArrayList<TodoList>();
+		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/todo_lists.xml");
+		InputStream httpStream = httpConnection.doGet(uri);
+		return factory.buildTodoLists(httpStream, false);
+	}
+	
+	/**
+	 * Returns a list of todo-list records that are in the given project. 
+	 * By default, all lists are returned, but you can filter the result
+	 * by giving the “filter” query parameter, set to “all” (the default),
+	 * “pending” (for lists with uncompleted items), and “finished”
+	 * (for lists that have no uncompleted items).
+	 * @param project
+	 * @param filter
+	 * @return
+	 */
+	public List<TodoList> getTodoLists(Project project, Filter filter) {
+		List<TodoList> resultList = new ArrayList<TodoList>();
+		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/todo_lists.xml?filter=" + filter.toString());
+		InputStream httpStream = httpConnection.doGet(uri);
+		return factory.buildTodoLists(httpStream, false);
+	}
+	
+	/**
+	 * Returns a single todo-list record identified by its integer ID.
+	 * @param id
+	 * @return
+	 */
 	public TodoList getTodoList(Long id) {
 		URI uri = httpConnection.createURI("/todo_lists/" + id + ".xml");
 		InputStream httpStream = httpConnection.doGet(uri);
 		return factory.buildTodoList(httpStream);
+	}
+	
+	/**
+	 * Destroys the given todo-list and all of its associated todo items.
+	 * @param todoList
+	 */
+	public void destroyTodoList(TodoList todoList) {
+		URI uri = httpConnection.createURI("/todo_lists/" + todoList.getId() + ".xml");
+		httpConnection.doDelete(uri);
 	}
 	
 	public void dispose() {
