@@ -1,6 +1,6 @@
 = How to use basecamp4j with Maven =
 
-The following is the Maven groupId and artifactId for basecamp4j.
+Just add the following to your pom.xml.
 
 {{{
 <dependency>
