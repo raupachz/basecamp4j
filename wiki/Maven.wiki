@@ -1,0 +1,21 @@
+= Maven =
+
+The following is the Maven groupId and artifactId for basecamp4j.
+
+{{{
+<dependency>
+    <groupId>org.basecamp4j</groupId>
+    <artifactId>basecamp4j</artifactId>
+</dependency>
+}}}
+
+
+You can also use the snapshot repository.
+
+{{{
+<repository>
+    <id>basecamp4j-snapshot</id>
+    <name>basecamp4j Snapshot Repository</name>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+</repository>
+}}}
