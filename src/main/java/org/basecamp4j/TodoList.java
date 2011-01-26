@@ -1,6 +1,7 @@
 package org.basecamp4j;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -31,6 +32,10 @@ public class TodoList implements Serializable {
 	private Boolean priva4e;
 	private Boolean tracked;
 	private List<TodoItem> todoItems;
+	
+	public TodoList() {
+		todoItems = new ArrayList<TodoItem>();
+	}
 	
 	public Long getId() {
 		return id;

@@ -10,6 +10,21 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
+/*
+ * Copyright 2010 Björn Raupach
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
 class ResourceFactory {
 	
 	private final SAXBuilder saxBuilder;
@@ -186,23 +201,38 @@ class ResourceFactory {
 		Element root = document.getRootElement();
 		return new MilestoneBuilder(root).build();
 	}
-
+	
 	public List<TodoList> buildTodoLists(InputStream httpStream) {
+		return buildTodoLists(httpStream, true);
+	}
+
+	public List<TodoList> buildTodoLists(InputStream httpStream, boolean withTodoItems) {
 		List<TodoList> resultList = new ArrayList<TodoList>();
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
 		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
 			Element e = (Element) it.next();
 			TodoList list = new TodoListBuilder(e).build();
+			if (withTodoItems) {
+				for (Object obj : e.getChild("todo-items").getChildren()) {
+					Element item = (Element) obj;
+					list.getTodoItems().add(new TodoItemBuilder(item).build());
+				}
+			}
 			resultList.add(list);
 		}
 		return resultList;
 	}
-
+	
 	public TodoList buildTodoList(InputStream httpStream) {
 		Document document = buildDocument(httpStream);
 		Element root = document.getRootElement();
-		return new TodoListBuilder(root).build();
+		TodoList list = new TodoListBuilder(root).build();
+		for (Object obj : root.getChild("todo-items").getChildren()) {
+			Element item = (Element) obj;
+			list.getTodoItems().add(new TodoItemBuilder(item).build());
+		}
+		return list;
 	}
 
 }
