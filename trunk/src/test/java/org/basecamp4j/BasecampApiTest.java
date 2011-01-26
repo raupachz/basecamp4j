@@ -133,13 +133,6 @@ public class BasecampApiTest {
 	}
 	
 	@Test @Ignore
-	public void testGetMilestones() {
-		Project project = api.getProject(projectId);
-		List<Milestone> milestones = api.getMilestones(project);
-		assertNotNull(milestones);
-	}
-	
-	@Test @Ignore
 	public void testGetTodoLists() {
 		List<TodoList> todos = api.getTodoLists();
 		assertNotNull(todos);
@@ -152,7 +145,7 @@ public class BasecampApiTest {
 		assertNotNull(todos);
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testProjectCounts() {
 		ProjectCounts counts = api.getProjectCounts();
 		assertNotNull(counts);
@@ -162,6 +155,29 @@ public class BasecampApiTest {
 	public void testCreateProject() {
 		api.createProject("Mein neues Projekt");
 	}
+	
+	@Test @Ignore
+	public void testGetMilestones() {
+		Project project = api.getProject(projectId);
+		List<Milestone> milestones = api.getMilestones(project);
+		assertNotNull(milestones);
+		for (Milestone m : milestones) {
+			System.out.println(m);
+		}
+	}
+	
+	@Test 
+	public void testCompleteAndUncompleteMilestones() {
+		Project project = api.getProject(projectId);
+		List<Milestone> milestones = api.getMilestones(project);
+		if (milestones.size() > 0) {
+			Milestone milestone = milestones.get(0);
+			api.completeMilestone(milestone);
+			api.uncompleteMilestone(milestone);
+		}
+	}
+	
+	
 	
 	
 	

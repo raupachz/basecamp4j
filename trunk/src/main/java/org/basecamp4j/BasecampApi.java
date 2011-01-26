@@ -2,7 +2,6 @@ package org.basecamp4j;
 
 import java.io.InputStream;
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

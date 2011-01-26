@@ -17,7 +17,7 @@ import java.util.Date;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-class TimeEntryBuilder extends AbstractResourceBuilder<TimeEntry> {
+class TimeEntryBuilder {
 	
 	private final TimeEntry timeEntry;
 	

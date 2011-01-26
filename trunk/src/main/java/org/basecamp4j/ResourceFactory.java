@@ -1,5 +1,6 @@
 package org.basecamp4j;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +24,12 @@ class ResourceFactory {
 			document = saxBuilder.build(in);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		} finally {
+			try {
+				in.close();
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		return document;
 	}

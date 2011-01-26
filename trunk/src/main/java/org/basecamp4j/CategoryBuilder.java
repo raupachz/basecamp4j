@@ -17,7 +17,7 @@ import org.jdom.Element;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-class CategoryBuilder extends AbstractResourceBuilder<Category>{
+class CategoryBuilder {
 	
 	private final Category category;
 	
