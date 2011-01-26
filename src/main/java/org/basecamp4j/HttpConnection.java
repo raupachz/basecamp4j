@@ -70,7 +70,7 @@ class HttpConnection {
 	
 	public InputStream doGet(URI uri) {
 		HttpGet httpget = new HttpGet(uri);
-		return doMethod(httpget);
+		return doMethod(httpget, false);
 	}
 	
 	public void doPost(URI uri, String request) {
@@ -81,7 +81,7 @@ class HttpConnection {
 			doMethod(httppost);
 		} catch (UnsupportedEncodingException e) {
 			onCaughtException(e);
-		}
+		} 
 	}
 	
 	public void doPost(URI uri) {
@@ -110,18 +110,24 @@ class HttpConnection {
 		doMethod(httpdelete);
 	}
 	
-	public InputStream doMethod(HttpUriRequest request) {
+	public void doMethod(HttpUriRequest request) {
+		doMethod(request,true);
+	}
+	
+	public InputStream doMethod(HttpUriRequest request, boolean closeResponse) {
 		appendHttpHeader(request);
 		InputStream httpStream = null;
 		try {
 			HttpResponse response = httpclient.execute(request);
-			StatusLine statusLine = response.getStatusLine();
-			if (hasInvalidStatusCode(statusLine)) {
-				raiseIllegalState(statusLine);
-			}
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {
 				httpStream  = entity.getContent();
+				if (closeResponse) {
+					httpStream.close();
+				}
+			}
+			if (hasInvalidStatusCode(response)) {
+				raiseIllegalState(response);
 			}
 		} catch (IOException e) {
 			onCaughtException(e);
@@ -138,12 +144,14 @@ class HttpConnection {
 		throw new RuntimeException(e);
 	}
 	
-	private boolean hasInvalidStatusCode(StatusLine statusLine) {
+	private boolean hasInvalidStatusCode(HttpResponse response) {
+		StatusLine statusLine = response.getStatusLine();
 		return statusLine.getStatusCode() != HttpStatus.SC_OK 
 				&& statusLine.getStatusCode() != HttpStatus.SC_CREATED;
 	}
 	
-	private void raiseIllegalState(StatusLine statusLine) {
+	private void raiseIllegalState(HttpResponse response) {
+		StatusLine statusLine = response.getStatusLine();
 		throw new IllegalStateException(statusLine.getStatusCode() + " - " + statusLine.getReasonPhrase());
 	}
 

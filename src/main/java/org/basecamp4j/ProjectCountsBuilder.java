@@ -18,7 +18,7 @@ import org.jdom.Element;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-class ProjectCountsBuilder extends AbstractResourceBuilder<ProjectCounts>{
+class ProjectCountsBuilder {
 	
 	private final ProjectCounts projectCounts;
 	
@@ -72,7 +72,6 @@ class ProjectCountsBuilder extends AbstractResourceBuilder<ProjectCounts>{
 		return this;
 	}
 
-	@Override
 	public ProjectCounts build() {
 		return projectCounts;
 	}

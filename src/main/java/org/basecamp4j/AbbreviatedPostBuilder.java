@@ -19,7 +19,7 @@ import org.jdom.Element;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-class AbbreviatedPostBuilder extends AbstractResourceBuilder<AbbreviatedPost> {
+class AbbreviatedPostBuilder {
 	
 	private final AbbreviatedPost post;
 	

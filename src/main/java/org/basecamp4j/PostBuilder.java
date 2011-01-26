@@ -20,7 +20,7 @@ import org.jdom.Element;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-class PostBuilder extends AbstractResourceBuilder<Post> {
+class PostBuilder {
 	
 	private final Post post;
 	

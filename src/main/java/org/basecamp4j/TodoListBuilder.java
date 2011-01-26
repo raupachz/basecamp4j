@@ -18,7 +18,7 @@ import org.jdom.Element;
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-class TodoListBuilder extends AbstractResourceBuilder<TodoList> {
+class TodoListBuilder {
 	
 	private final TodoList todoList;
 	
@@ -111,7 +111,6 @@ class TodoListBuilder extends AbstractResourceBuilder<TodoList> {
 		return this;
 	}
 
-	@Override
 	public TodoList build() {
 		return todoList;
 	}
