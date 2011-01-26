@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
@@ -8,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.basecamp4j</groupId>
   <artifactId>basecamp4j</artifactId>
-  <version>0.9.1-SNAPSHOT</version>
+  <version>0.9.1</version>
   <packaging>jar</packaging>
   <name>basecamp4j</name>
   <description>basecamp4j is a Java wrapper library for the Basecamp REST API</description>
@@ -21,9 +20,9 @@
     </license>
   </licenses>
   <scm>
-    <url>scm:svn:https://basecamp4j.googlecode.com/svn/trunk</url>
-    <connection>scm:svn:https://basecamp4j.googlecode.com/svn/trunk</connection>
-    <developerConnection>scm:svn:https://basecamp4j.googlecode.com/svn/trunk</developerConnection>
+    <url>scm:svn:https://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.1</url>
+    <connection>scm:svn:https://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.1</connection>
+    <developerConnection>scm:svn:https://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.1</developerConnection>
   </scm>
   <developers>
     <developer>

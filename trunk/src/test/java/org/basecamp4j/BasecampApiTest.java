@@ -17,29 +17,18 @@ import org.junit.Test;
 
 public class BasecampApiTest {
 	
-	public static String host;
-	public static String token;
-	public static long projectId;
+	public static String host = "yourdomain.basecamphq.com";
+	public static String token = "yourauthtoken";
+	public static long projectId = 1L;
 	
 	private BasecampApi api;
 	
-	@BeforeClass
-	public static void loadAuthenticationProperties() throws FileNotFoundException, IOException {
-		ClassLoader classLoader = BasecampApiTest.class.getClassLoader();
-		InputStream in = classLoader.getResourceAsStream("org/basecamp4j/authentication.properties");
-		Properties authenticationProperties = new Properties();
-		authenticationProperties.load(in);
-		host = authenticationProperties.getProperty("host");
-		token = authenticationProperties.getProperty("token");
-		projectId = Long.valueOf(authenticationProperties.getProperty("project-id"));
-	}
-	
-	@Before @Ignore
+	@Before
 	public void setUp() throws IOException {
 		api = new BasecampApi(host , token);
 	}
 	
-	@After @Ignore
+	@After
 	public void tearDown() {
 		api.dispose();
 	}
@@ -156,7 +145,6 @@ public class BasecampApiTest {
 		Project project = api.getProject(projectId);
 		List<TodoList> todos = api.getTodoLists(project, Filter.finished);
 	}
-		
 	
 	@Test @Ignore
 	public void testGetTodoList() {
@@ -210,9 +198,5 @@ public class BasecampApiTest {
 			api.updateMilestone(milestone, false, false, false);
 		}
 	}
-	
-	
-	
-	
 	
 }
