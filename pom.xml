@@ -7,7 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.basecamp4j</groupId>
   <artifactId>basecamp4j</artifactId>
-  <version>0.9.1</version>
+  <version>0.9.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>basecamp4j</name>
   <description>basecamp4j is a Java wrapper library for the Basecamp REST API</description>
@@ -20,9 +20,9 @@
     </license>
   </licenses>
   <scm>
-    <url>scm:svn:https://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.1</url>
-    <connection>scm:svn:https://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.1</connection>
-    <developerConnection>scm:svn:https://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.1</developerConnection>
+    <url>http://basecamp4j.googlecode.com/svn/trunk/</url>
+    <connection>scm:svn:http://basecamp4j.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://basecamp4j.googlecode.com/svn/trunk/</developerConnection>
   </scm>
   <developers>
     <developer>
