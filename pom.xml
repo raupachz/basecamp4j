@@ -20,9 +20,9 @@
     </license>
   </licenses>
   <scm>
-    <url>http://basecamp4j.googlecode.com/svn/trunk/</url>
-    <connection>scm:svn:http://basecamp4j.googlecode.com/svn/trunk/</connection>
-    <developerConnection>scm:svn:https://basecamp4j.googlecode.com/svn/trunk/</developerConnection>
+    <url>http://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.2</url>
+    <connection>scm:svn:http://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.2</connection>
+    <developerConnection>scm:svn:https://basecamp4j.googlecode.com/svn/tags/basecamp4j-0.9.2</developerConnection>
   </scm>
   <developers>
     <developer>
