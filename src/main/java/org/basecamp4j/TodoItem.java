@@ -3,6 +3,8 @@ package org.basecamp4j;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /*
  * Copyright 2010 Björn Raupach
 
@@ -154,6 +156,26 @@ public class TodoItem implements Serializable {
 	
 	public void setCompleterName(String completerName) {
 		this.completerName = completerName;
+	}
+	
+	public String toString() {
+		return new ToStringBuilder(this)
+			.append("id",id)
+			.append("todoListId",todoListId)
+			.append("content",content)
+			.append("position",position)
+			.append("createdOn",createdOn)
+			.append("creatorId",creatorId)
+			.append("creatorName",creatorName)
+			.append("completed",completed)
+			.append("commentsCount",commentsCount)
+			.append("responsiblePartyType",responsiblePartyType)
+			.append("responsiblePartyId",responsiblePartyId)
+			.append("responsiblePartyName",responsiblePartyName)
+			.append("completedOn",completedOn)
+			.append("completerId",completerId)
+			.append("completerName",completerName)
+			.toString();
 	}
 	
 }
