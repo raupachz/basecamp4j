@@ -17,8 +17,8 @@ import org.junit.Test;
 
 public class BasecampApiTest {
 	
-	public static String host = "domain.basecamphq.com";
-	public static String token = "token";
+	public static String host = "yourdomain.basecamphq.com";
+	public static String token = "yourauthtoken";
 	public static long projectId = 1L;
 	
 	private BasecampApi api;
@@ -76,7 +76,7 @@ public class BasecampApiTest {
 		Long id = 1L;
 		Category category = api.getCategory(id);
 		System.out.println(category);
-		category.setName("acme");
+		category.setName("Muahhaha");
 		api.updateCategory(category);
 	}
 	
@@ -98,7 +98,7 @@ public class BasecampApiTest {
 	@Test @Ignore
 	public void testCreateCategory() {
 		Project project = api.getProject(1L);
-		api.createCategory(project, "acme", "acme");
+		api.createCategory(project, "Testkategorie", "post");
 	}
 	
 	@Test @Ignore
@@ -109,7 +109,7 @@ public class BasecampApiTest {
 	
 	@Test @Ignore
 	public void testGetRecentComments() {
-		List<Comment> comments = api.getComments(Resource.posts, 1l);
+		List<Comment> comments = api.getComments(Resource.posts, 38637044L);
 		for (Comment c : comments) {
 			System.out.println(c);
 		}
@@ -117,8 +117,8 @@ public class BasecampApiTest {
 	
 	@Test @Ignore
 	public void testCreateComment() {
-		String comment = "Comment about API";
-		api.createComment(Resource.posts, 1l, comment);
+		String comment = "Kommentar über API";
+		api.createComment(Resource.posts, 38637044L, comment);
 	}
 	
 	@Test @Ignore
@@ -133,7 +133,7 @@ public class BasecampApiTest {
 		assertNotNull(todos);
 	}
 	
-	@Test @Ignore
+	@Test @Ignore 
 	public void testGetTodoListsByProject() {
 		Project project = api.getProject(projectId);
 		List<TodoList> todos = api.getTodoLists(project);
@@ -144,14 +144,11 @@ public class BasecampApiTest {
 	public void testGetTodoListsByProjectByFilter() {
 		Project project = api.getProject(projectId);
 		List<TodoList> todos = api.getTodoLists(project, Filter.finished);
-		for (TodoList list : todos) {
-			System.out.println(list);
-		}
 	}
 	
 	@Test @Ignore
 	public void testGetTodoList() {
-		TodoList todo = api.getTodoList(1l);
+		TodoList todo = api.getTodoList(11387767l);
 		for (TodoItem item : todo.getTodoItems()) {
 			System.out.println(item);
 		}
@@ -166,7 +163,7 @@ public class BasecampApiTest {
 	
 	@Test @Ignore
 	public void testCreateProject() {
-		api.createProject("My new project");
+		api.createProject("Mein neues Projekt");
 	}
 	
 	@Test @Ignore
@@ -191,44 +188,15 @@ public class BasecampApiTest {
 	}
 	
 	@Test @Ignore
-	public void testUpdateMilestone() {
+	public void tesUpdateMilestone() {
 		Project project = api.getProject(projectId);
 		List<Milestone> milestones = api.getMilestones(project);
 		if (milestones.size() > 0) {
 			Milestone milestone = milestones.get(0);
 			milestone.setDeadline(new Date());
-			milestone.setTitle("current milestones");
+			milestone.setTitle("Milestone heute");
 			api.updateMilestone(milestone, false, false, false);
 		}
-	}
-	
-	@Test @Ignore
-	public void testGetAllItems() {
-		TodoList todo = api.getTodoList(1l);
-		List<TodoItem> items = api.getAllItems(todo);
-		for (TodoItem item : items) {
-			System.out.println(item);
-		}
-	}
-	
-	@Test @Ignore
-	public void testGetItem() {
-		TodoItem item = api.getItem(1l);
-		System.out.println(item);
-	}
-	
-	@Test @Ignore
-	public void testCompleteUncompleteItem() {
-		TodoItem item = api.getItem(1l);
-		api.completeItem(item);
-		api.uncompleteItem(item);
-	}
-	
-	@Test @Ignore
-	public void testCreateNewTodoItem() {
-		Company me = api.getCompany(1l);
-		TodoList todo = api.getTodoList(1l);
-		api.createItem(todo, "write something", new Date(), me, false);
 	}
 	
 }

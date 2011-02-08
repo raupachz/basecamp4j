@@ -450,7 +450,7 @@ public class BasecampApi {
 		sb.append("<milestone>");
 		sb.append("<title>").append(title).append("</title>");
 		sb.append("<deadline>").append(IsoDateTimeFormat.formatDate(deadline)).append("</deadline>");
-		sb.append("<responsible-party>").append("c").append(responsibleCompany.getId()).append("</responsible-party>");
+		sb.append("<responsible-party>").append("c" + responsibleCompany.getId()).append("</responsible-party>");
 		sb.append("<notify>").append(notify).append("</notify>");
 		sb.append("</milestone>");
 		sb.append("</request>");
@@ -506,7 +506,7 @@ public class BasecampApi {
 	/**
 	 * Returns a list of todo-list records that are in the given project.
 	 * @param project
-	 * @return list of todo-list records
+	 * @return
 	 */
 	public List<TodoList> getTodoLists(Project project) {
 		List<TodoList> resultList = new ArrayList<TodoList>();
@@ -552,113 +552,6 @@ public class BasecampApi {
 		httpConnection.doDelete(uri);
 	}
 	
-	/**
-	 * Returns all todo item records for a single todo list. 
-	 * This is almost the same as the “Get list” action, except
-	 * it does not return any information about the list itself. 
-	 * The items are returned in priority order, as defined by 
-	 * how they were ordered either in the web UI, or via the 
-	 * “Reorder items” action.
-	 * @param list
-	 * @return
-	 */
-	public List<TodoItem> getAllItems(TodoList list) {
-		URI uri = httpConnection.createURI("/todo_lists/" + list.getId() + "/todo_items.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
-		return factory.buildTodoItemsList(httpStream);
-	}
-	
-	/**
-	 * Returns a single todo item record, given its integer ID.
-	 * @param id
-	 * @return
-	 */
-	public TodoItem getItem(Long id) {
-		URI uri = httpConnection.createURI("/todo_items/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(uri);
-		return factory.buildTodoItem(httpStream);
-	}
-	
-	/**
-	 * Marks the specified todo item as completed.
-	 * @param item
-	 */
-	public void completeItem(TodoItem item) {
-		URI uri = httpConnection.createURI("/todo_items/" + item.getId() + "/complete.xml");
-		httpConnection.doPut(uri);
-	}
-	
-	/**
-	 * If the specified todo item was previously marked as completed, 
-	 * this unmarks it, restoring it to an “uncompleted” state. 
-	 * If it was already in the uncompleted state, this call has no effect.
-	 * @param item
-	 */
-	public void uncompleteItem(TodoItem item) {
-		URI uri = httpConnection.createURI("/todo_items/" + item.getId() + "/uncomplete.xml");
-		httpConnection.doPut(uri);
-	}
-	
-	/**
-	 * Creates a new todo item record for the given list.
-	 * @param list
-	 * @param content
-	 * @param dueAt
-	 * @param responsibleParty
-	 * @param notify
-	 */
-	public void createItem(TodoList list, String content, Date dueAt, Person responsiblePerson, boolean notify) {
-		URI uri = httpConnection.createURI("/todo_lists/" + list.getId() + "/todo_items.xml");
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append("<request>");
-		sb.append("<todo-item>");
-		sb.append("<content>").append(content).append("</content>");
-		sb.append("<due-at>").append(IsoDateTimeFormat.formatDate(dueAt)).append("</due-at>");
-		sb.append("<responsible-party>").append(responsiblePerson.getId()).append("</responsible-party>");
-		sb.append("<notify>").append(notify).append("</notify>");
-		sb.append("</todo-item>");
-		sb.append("</request>");
-		
-		httpConnection.doPost(uri, sb.toString());
-	}
-	
-	/**
-	 * Creates a new todo item record for the given list.
-	 * @param list
-	 * @param content
-	 * @param dueAt
-	 * @param responsibleParty
-	 * @param notify
-	 */
-	public void createItem(TodoList list, String content, Date dueAt, Company responsibleCompany, boolean notify) {
-		URI uri = httpConnection.createURI("/todo_lists/" + list.getId() + "/todo_items.xml");
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append("<request>");
-		sb.append("<todo-item>");
-		sb.append("<content>").append(content).append("</content>");
-		sb.append("<due-at>").append(IsoDateTimeFormat.formatDate(dueAt)).append("</due-at>");
-		sb.append("<responsible-party>").append("c").append(responsibleCompany.getId()).append("</responsible-party>");
-		sb.append("<notify>").append(notify).append("</notify>");
-		sb.append("</todo-item>");
-		sb.append("</request>");
-		
-		httpConnection.doPost(uri, sb.toString());
-	}
-	
-	/**
-	 * Destroys the given todo item record.
-	 * @param item
-	 */
-	public void destroyItem(TodoItem item) {
-		URI uri = httpConnection.createURI("/todo_items/" + item.getId() + ".xml");
-		httpConnection.doDelete(uri);
-	}
-	
-	/**
-	 * Releases resources.
-	 */
 	public void dispose() {
 		httpConnection.close();
 	}
