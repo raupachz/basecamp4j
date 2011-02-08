@@ -235,4 +235,22 @@ class ResourceFactory {
 		return list;
 	}
 
+	public List<TodoItem> buildTodoItemsList(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		List<TodoItem> list = new ArrayList<TodoItem>();
+		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
+			Element e = (Element) it.next();
+			TodoItem item = new TodoItemBuilder(e).build();
+			list.add(item);
+		}
+		return list;
+	}
+
+	public TodoItem buildTodoItem(InputStream httpStream) {
+		Document document = buildDocument(httpStream);
+		Element root = document.getRootElement();
+		return new TodoItemBuilder(root).build();
+	}
+
 }
