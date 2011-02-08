@@ -7,11 +7,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.basecamp4j</groupId>
   <artifactId>basecamp4j</artifactId>
-  <version>0.9.2-SNAPSHOT</version>
-  <packaging>jar</packaging>
   <name>basecamp4j</name>
   <description>basecamp4j is a Java wrapper library for the Basecamp REST API</description>
   <url>http://code.google.com/p/basecamp4j</url>
+  <version>0.9.2-SNAPSHOT</version>
+  <packaging>jar</packaging>
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -64,8 +64,26 @@
     </dependency>
   </dependencies>
   <build>
-  	<finalName>basecamp4j</finalName>
     <plugins>
+	  <plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-assembly-plugin</artifactId>
+		<version>2.2-beta-5</version>
+		<executions>
+		  <execution>
+		    <phase>package</phase>
+		    <goals>
+		      <goal>assembly</goal> 
+		    </goals>
+		    <configuration>
+		      <attach>false</attach>
+		      <descriptors>
+          	    <descriptor>bundle.xml</descriptor>
+		      </descriptors>
+		    </configuration>
+		  </execution>
+		</executions>
+	  </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -77,11 +95,12 @@
       <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-source-plugin</artifactId>
+		<version>2.1.2</version>
 		<executions>
 		  <execution>
 			<id>attach-sources</id>
 			  <goals>
-                <goal>jar</goal>
+                <goal>jar-no-fork</goal>
               </goals>
 		  </execution>
 		</executions>
