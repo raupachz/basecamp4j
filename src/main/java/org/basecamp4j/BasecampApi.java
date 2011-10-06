@@ -6,6 +6,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.basecamp4j.factory.ResourceFactory;
+import org.basecamp4j.model.Account;
+import org.basecamp4j.model.Attachment;
+import org.basecamp4j.model.Category;
+import org.basecamp4j.model.Comment;
+import org.basecamp4j.model.Company;
+import org.basecamp4j.model.Filter;
+import org.basecamp4j.model.Milestone;
+import org.basecamp4j.model.Person;
+import org.basecamp4j.model.Post;
+import org.basecamp4j.model.Project;
+import org.basecamp4j.model.ProjectCounts;
+import org.basecamp4j.model.Resource;
+import org.basecamp4j.model.TodoItem;
+import org.basecamp4j.model.TodoList;
+import org.basecamp4j.model.http.HttpConnection;
+import org.basecamp4j.utils.IsoDateTimeFormat;
+
 /*
  * Copyright 2010 Björn Raupach
 

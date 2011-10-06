@@ -2,16 +2,24 @@ package org.basecamp4j;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
+import org.basecamp4j.model.Account;
+import org.basecamp4j.model.Category;
+import org.basecamp4j.model.Comment;
+import org.basecamp4j.model.Company;
+import org.basecamp4j.model.Filter;
+import org.basecamp4j.model.Milestone;
+import org.basecamp4j.model.Person;
+import org.basecamp4j.model.Project;
+import org.basecamp4j.model.ProjectCounts;
+import org.basecamp4j.model.Resource;
+import org.basecamp4j.model.TodoItem;
+import org.basecamp4j.model.TodoList;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
