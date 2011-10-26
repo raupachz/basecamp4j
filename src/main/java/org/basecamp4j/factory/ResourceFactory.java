@@ -35,6 +35,7 @@ import org.basecamp4j.model.builder.TodoListBuilder;
 import org.basecamp4j.xml.DOMUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /*
  * Copyright 2010 Björn Raupach
@@ -78,10 +79,12 @@ public class ResourceFactory {
 		List<Project> resultList = new ArrayList<Project>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = projects.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Node childNode = root.getFirstChild(); childNode != null;) {
+			Node nextChild = childNode.getNextSibling();
+			Element e = (Element) childNode;
 			Project project = new ProjectBuilder(e).build();
 			resultList.add(project);
+			childNode = nextChild;
 		}
 		return resultList;
 	}
@@ -90,10 +93,12 @@ public class ResourceFactory {
 		List<Company> resultList = new ArrayList<Company>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Node childNode = root.getFirstChild(); childNode != null;) {
+			Node nextChild = childNode.getNextSibling();
+			Element e = (Element) childNode;
 			Company company = new CompanyBuilder(e).build();
 			resultList.add(company);
+			childNode = nextChild;
 		}
 		return resultList;
 	}
@@ -108,10 +113,12 @@ public class ResourceFactory {
 		List<Category> resultList = new ArrayList<Category>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Node childNode = root.getFirstChild(); childNode != null; ) {
+			Node nextChild = childNode.getNextSibling();
+			Element e = (Element) childNode;
 			Category category = new CategoryBuilder(e).build();
 			resultList.add(category);
+			childNode = nextChild;
 		}
 		return resultList; 
 	}
@@ -132,10 +139,12 @@ public class ResourceFactory {
 		List<Person> resultList = new ArrayList<Person>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Node childNode = root.getFirstChild(); childNode != null; ) {
+			Node nextChild = childNode.getNextSibling();
+			Element e = (Element) childNode;
 			Person person = new PersonBuilder(e).build();
 			resultList.add(person);
+			childNode = nextChild;
 		}
 		return resultList;
 	}
@@ -144,10 +153,12 @@ public class ResourceFactory {
 		List<Attachment> resultList = new ArrayList<Attachment>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Node childNode = root.getFirstChild(); childNode != null;) {
+			Node nextChild = childNode.getNextSibling();
+			Element e = (Element) childNode;
 			Attachment attachment = new AttachmentBuilder(e).build();
 			resultList.add(attachment);
+			childNode = nextChild;
 		}
 		return resultList;
 	}
@@ -156,10 +167,12 @@ public class ResourceFactory {
 		List<Post> resultList = new ArrayList<Post>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Node childNode = root.getFirstChild(); childNode != null;) {
+			Node nextChild = childNode.getNextSibling();
+			Element e = (Element) childNode;
 			Post post = new PostBuilder(e).build();
 			resultList.add(post);
+			childNode = nextChild;
 		}
 		return resultList;
 	}
@@ -174,10 +187,12 @@ public class ResourceFactory {
 		List<Comment> resultList = new ArrayList<Comment>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Node childNode = root.getFirstChild(); childNode != null;) {
+			Node nextChild = childNode.getNextSibling();
+			Element e = (Element) childNode;
 			Comment comment = new CommentBuilder(e).build();
 			resultList.add(comment);
+			childNode = nextChild;
 		}
 		return resultList;
 	}
@@ -192,10 +207,12 @@ public class ResourceFactory {
 		List<Milestone> resultList = new ArrayList<Milestone>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Node childNode = root.getFirstChild(); childNode != null;) {
+			Node nextChild = childNode.getNextSibling();
+			Element e = (Element) childNode;
 			Milestone milestone = new MilestoneBuilder(e).build();
 			resultList.add(milestone);
+			childNode = nextChild;
 		}
 		return resultList;
 	}
