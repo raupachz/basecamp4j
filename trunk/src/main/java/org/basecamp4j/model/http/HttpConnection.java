@@ -41,9 +41,17 @@ public class HttpConnection  {
 	public InputStream doPost(URL url, String request) {
 		return doMethod(url, "POST", request);
 	}
+	
+	public InputStream doPost(URL url) {
+		return doMethod(url, "POST", null);
+	}
 
 	public void doPut(URL url, String request) {
 		doMethod(url, "PUT", request);
+	}
+	
+	public void doPut(URL url) {
+		doMethod(url, "PUT", null);
 	}
 	
 	public void doDelete(URL url) {

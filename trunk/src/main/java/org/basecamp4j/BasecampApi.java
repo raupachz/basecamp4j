@@ -262,8 +262,8 @@ public class BasecampApi {
 	 */
 	public List<Person> getPeople(Company company) {
 		List<Person> resultList = new ArrayList<Person>();
-		URI uri = httpConnection.createURI("/companies/" + company.getId() + "/people.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/companies/" + company.getId() + "/people.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildPeople(httpStream);
 	}
 	
@@ -273,14 +273,14 @@ public class BasecampApi {
 	 * @return a single person identified by their integer ID.
 	 */
 	public Person getPerson(Long id) {
-		URI uri = httpConnection.createURI("/people/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/people/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildPerson(httpStream);
 	}
 
 	public List<Attachment> getFiles(Project project) {
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/attachments.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/attachments.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildAttachments(httpStream);
 	}
 	
@@ -290,8 +290,8 @@ public class BasecampApi {
 	 * @return the 25 most recent messages in the given project.
 	 */
 	public List<Post> getMessages(Project project) {
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/posts.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/posts.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildPosts(httpStream);
 	}
 	
@@ -301,8 +301,8 @@ public class BasecampApi {
 	 * @return a single message record identified by its integer ID.
 	 */
 	public Post getMessage(Long id) {
-		URI uri = httpConnection.createURI("/posts/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/posts/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildPost(httpStream);
 	}
 	
@@ -313,9 +313,9 @@ public class BasecampApi {
 	 * @return the most 25 most recent messages in the given project for the given category.
 	 */
 	public List<Post> getMessages(Project project, Category category) {
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/cat/" + category.getId()  + "/posts.xml");
 		List<Post> resultList = new ArrayList<Post>();
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/cat/" + category.getId()  + "/posts.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildPosts(httpStream);
 	}
 	
@@ -324,7 +324,7 @@ public class BasecampApi {
 	}
 	
 	public void createMessage(Project project, String title, String body) {
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/posts.xml");
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/posts.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
@@ -334,7 +334,7 @@ public class BasecampApi {
 		sb.append("</post>");
 		sb.append("</request>");
 		
-		httpConnection.doPost(uri, sb.toString());
+		httpConnection.doPost(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -342,16 +342,16 @@ public class BasecampApi {
 	 * @param post
 	 */
 	public void destroyMessage(Post post) {
-		URI uri = httpConnection.createURI("/posts/" + post.getId() + ".xml");
-		httpConnection.doDelete(uri);
+		URLBuilder url = new URLBuilder(host, "/posts/" + post.getId() + ".xml");
+		httpConnection.doDelete(url.toURL());
 	}
 	
 	/**
 	 * Return a list of the 50 most recent comments associated with the specified resource.
 	 */
 	public List<Comment> getComments(Resource resource, Long resourceId) {
-		URI uri = httpConnection.createURI("/" + resource  +  "/" + resourceId + "/comments.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/" + resource  +  "/" + resourceId + "/comments.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildComments(httpStream);
 	}
 	
@@ -359,8 +359,8 @@ public class BasecampApi {
 	 * Retrieve a specific comment by its id.
 	 */
 	public Comment getComment(Long id) {
-		URI uri = httpConnection.createURI("/comments/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/comments/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildComment(httpStream);
 	}
 	
@@ -371,14 +371,14 @@ public class BasecampApi {
 	 * @param comment
 	 */
 	public void createComment(Resource resource, Long resourceId, String comment) {
-		URI uri = httpConnection.createURI("/" + resource  +  "/" + resourceId + "/comments.xml");
+		URLBuilder url = new URLBuilder(host, "/" + resource  +  "/" + resourceId + "/comments.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<comment>");
 		sb.append("  <body>").append(comment).append("</body>");
 		sb.append("</comment>");
 		
-		httpConnection.doPost(uri, sb.toString());
+		httpConnection.doPost(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -386,8 +386,8 @@ public class BasecampApi {
 	 * @param comment
 	 */
 	public void destroyComment(Comment comment) {
-		URI uri = httpConnection.createURI("/comments/" + comment.getId() + ".xml");
-		httpConnection.doDelete(uri);
+		URLBuilder url = new URLBuilder(host, "/comments/" + comment.getId() + ".xml");
+		httpConnection.doDelete(url.toURL());
 	}
 	
 	/**
@@ -398,8 +398,8 @@ public class BasecampApi {
 	 * @return
 	 */
 	public List<Milestone> getMilestones(Project project) {
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/milestones/list.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/milestones/list.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildMilestones(httpStream);
 	}
 	
@@ -409,8 +409,8 @@ public class BasecampApi {
 	 * @return 
 	 */
 	public void completeMilestone(Milestone milestone) {
-		URI uri = httpConnection.createURI("/milestones/complete/" + milestone.getId());
-		httpConnection.doPut(uri);
+		URLBuilder url = new URLBuilder(host, "/milestones/complete/" + milestone.getId());
+		httpConnection.doPut(url.toURL());
 	}
 	
 	/**
@@ -418,8 +418,8 @@ public class BasecampApi {
 	 * @param milestone
 	 */
 	public void uncompleteMilestone(Milestone milestone) {
-		URI uri = httpConnection.createURI("/milestones/uncomplete/" + milestone.getId());
-		httpConnection.doPut(uri);
+		URLBuilder url = new URLBuilder(host, "/milestones/uncomplete/" + milestone.getId());
+		httpConnection.doPut(url.toURL());
 	}
 	
 	/**
@@ -431,7 +431,7 @@ public class BasecampApi {
 	 * @param notify
 	 */
 	public void createMilestone(Project project, String title, Date deadline, Person responsiblePerson,  boolean notify) {
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/milestones/create");
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/milestones/create");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
@@ -443,7 +443,7 @@ public class BasecampApi {
 		sb.append("</milestone>");
 		sb.append("</request>");
 		
-		httpConnection.doPost(uri, sb.toString());
+		httpConnection.doPost(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -451,8 +451,8 @@ public class BasecampApi {
 	 * @param milestone
 	 */
 	public void deleteMilestone(Milestone milestone) {
-		URI uri = httpConnection.createURI("/milestones/delete/" + milestone.getId());
-		httpConnection.doPost(uri);
+		URLBuilder url = new URLBuilder(host, "/milestones/delete/" + milestone.getId());
+		httpConnection.doPost(url.toURL());
 	}
 	
 	/**
@@ -464,7 +464,7 @@ public class BasecampApi {
 	 * @param notify
 	 */
 	public void createMilestone(Project project, String title, Date deadline, Company responsibleCompany,  boolean notify) {
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/milestones/create");
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/milestones/create");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
@@ -476,11 +476,11 @@ public class BasecampApi {
 		sb.append("</milestone>");
 		sb.append("</request>");
 		
-		httpConnection.doPost(uri, sb.toString());
+		httpConnection.doPost(url.toURL(), sb.toString());
 	}
 	
 	public void updateMilestone(Milestone milestone, boolean notify, boolean moveUpcomingMilestones, boolean moveUpcomingMilestonesOffWeekends) {
-		URI uri = httpConnection.createURI("/milestones/update/" + milestone.getId());
+		URLBuilder url = new URLBuilder(host, "/milestones/update/" + milestone.getId());
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
@@ -494,7 +494,7 @@ public class BasecampApi {
 		sb.append("<move-upcoming-milestones>").append(moveUpcomingMilestonesOffWeekends).append("</move-upcoming-milestones>");
 		sb.append("</request>");
 		
-		httpConnection.doPost(uri, sb.toString());
+		httpConnection.doPost(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -502,8 +502,8 @@ public class BasecampApi {
 	 * @return todo-lists
 	 */
 	public List<TodoList> getTodoLists() {
-		URI uri = httpConnection.createURI("/todo_lists.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_lists.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildTodoLists(httpStream);
 	}
 	
@@ -519,8 +519,8 @@ public class BasecampApi {
 	 * @return todo-lists
 	 */
 	public List<TodoList> getTodoLists(String responsibleParty) {
-		URI uri = httpConnection.createURI("/todo_lists.xml?responsible_party=" + responsibleParty);
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_lists.xml?responsible_party=" + responsibleParty);
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildTodoLists(httpStream);
 	}
 	
@@ -530,9 +530,8 @@ public class BasecampApi {
 	 * @return list of todo-list records
 	 */
 	public List<TodoList> getTodoLists(Project project) {
-		List<TodoList> resultList = new ArrayList<TodoList>();
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/todo_lists.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/todo_lists.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildTodoLists(httpStream, false);
 	}
 	
@@ -547,9 +546,8 @@ public class BasecampApi {
 	 * @return
 	 */
 	public List<TodoList> getTodoLists(Project project, Filter filter) {
-		List<TodoList> resultList = new ArrayList<TodoList>();
-		URI uri = httpConnection.createURI("/projects/" + project.getId() + "/todo_lists.xml?filter=" + filter.toString());
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/projects/" + project.getId() + "/todo_lists.xml?filter=" + filter.toString());
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildTodoLists(httpStream, false);
 	}
 	
@@ -559,8 +557,8 @@ public class BasecampApi {
 	 * @return
 	 */
 	public TodoList getTodoList(Long id) {
-		URI uri = httpConnection.createURI("/todo_lists/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_lists/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildTodoList(httpStream);
 	}
 	
@@ -569,8 +567,8 @@ public class BasecampApi {
 	 * @param todoList
 	 */
 	public void destroyTodoList(TodoList todoList) {
-		URI uri = httpConnection.createURI("/todo_lists/" + todoList.getId() + ".xml");
-		httpConnection.doDelete(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_lists/" + todoList.getId() + ".xml");
+		httpConnection.doDelete(url.toURL());
 	}
 	
 	/**
@@ -584,8 +582,8 @@ public class BasecampApi {
 	 * @return
 	 */
 	public List<TodoItem> getAllItems(TodoList list) {
-		URI uri = httpConnection.createURI("/todo_lists/" + list.getId() + "/todo_items.xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_lists/" + list.getId() + "/todo_items.xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildTodoItemsList(httpStream);
 	}
 	
@@ -595,8 +593,8 @@ public class BasecampApi {
 	 * @return
 	 */
 	public TodoItem getItem(Long id) {
-		URI uri = httpConnection.createURI("/todo_items/" + id + ".xml");
-		InputStream httpStream = httpConnection.doGet(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_items/" + id + ".xml");
+		InputStream httpStream = httpConnection.doGet(url.toURL());
 		return factory.buildTodoItem(httpStream);
 	}
 	
@@ -605,8 +603,8 @@ public class BasecampApi {
 	 * @param item
 	 */
 	public void completeItem(TodoItem item) {
-		URI uri = httpConnection.createURI("/todo_items/" + item.getId() + "/complete.xml");
-		httpConnection.doPut(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_items/" + item.getId() + "/complete.xml");
+		httpConnection.doPut(url.toURL());
 	}
 	
 	/**
@@ -616,8 +614,8 @@ public class BasecampApi {
 	 * @param item
 	 */
 	public void uncompleteItem(TodoItem item) {
-		URI uri = httpConnection.createURI("/todo_items/" + item.getId() + "/uncomplete.xml");
-		httpConnection.doPut(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_items/" + item.getId() + "/uncomplete.xml");
+		httpConnection.doPut(url.toURL());
 	}
 	
 	/**
@@ -629,7 +627,7 @@ public class BasecampApi {
 	 * @param notify
 	 */
 	public void createItem(TodoList list, String content, Date dueAt, Person responsiblePerson, boolean notify) {
-		URI uri = httpConnection.createURI("/todo_lists/" + list.getId() + "/todo_items.xml");
+		URLBuilder url = new URLBuilder(host, "/todo_lists/" + list.getId() + "/todo_items.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
@@ -641,7 +639,7 @@ public class BasecampApi {
 		sb.append("</todo-item>");
 		sb.append("</request>");
 		
-		httpConnection.doPost(uri, sb.toString());
+		httpConnection.doPost(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -653,7 +651,7 @@ public class BasecampApi {
 	 * @param notify
 	 */
 	public void createItem(TodoList list, String content, Date dueAt, Company responsibleCompany, boolean notify) {
-		URI uri = httpConnection.createURI("/todo_lists/" + list.getId() + "/todo_items.xml");
+		URLBuilder url = new URLBuilder(host, "/todo_lists/" + list.getId() + "/todo_items.xml");
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("<request>");
@@ -665,7 +663,7 @@ public class BasecampApi {
 		sb.append("</todo-item>");
 		sb.append("</request>");
 		
-		httpConnection.doPost(uri, sb.toString());
+		httpConnection.doPost(url.toURL(), sb.toString());
 	}
 	
 	/**
@@ -673,8 +671,8 @@ public class BasecampApi {
 	 * @param item
 	 */
 	public void destroyItem(TodoItem item) {
-		URI uri = httpConnection.createURI("/todo_items/" + item.getId() + ".xml");
-		httpConnection.doDelete(uri);
+		URLBuilder url = new URLBuilder(host, "/todo_items/" + item.getId() + ".xml");
+		httpConnection.doDelete(url.toURL());
 	}
 	
 }
