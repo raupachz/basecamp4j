@@ -58,7 +58,7 @@ public class ResourceFactory {
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
 		Account acc = new AccountBuilder(root).build();
-		Subscription subscription = new SubscriptionBuilder(account.getChild("subscription")).build();
+		Subscription subscription = new SubscriptionBuilder(DOMUtils.getChild(root, "subscription")).build();
 		acc.setSubscription(subscription);
 		return acc;
 	}
@@ -231,13 +231,11 @@ public class ResourceFactory {
 		List<TodoList> resultList = new ArrayList<TodoList>();
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
+		for (Element e : DOMUtils.getChildren(root)) {
 			TodoList list = new TodoListBuilder(e).build();
 			if (withTodoItems) {
-				for (Object obj : e.getChild("todo-items").getChildren()) {
-					Element item = (Element) obj;
-					list.getTodoItems().add(new TodoItemBuilder(item).build());
+				for (Element el : DOMUtils.getChildren(e, "todo-items")) {
+					list.getTodoItems().add(new TodoItemBuilder(el).build());
 				}
 			}
 			resultList.add(list);
@@ -249,9 +247,8 @@ public class ResourceFactory {
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
 		TodoList list = new TodoListBuilder(root).build();
-		for (Object obj : root.getChild("todo-items").getChildren()) {
-			Element item = (Element) obj;
-			list.getTodoItems().add(new TodoItemBuilder(item).build());
+		for (Element el : DOMUtils.getChildren(root, "todo-items")) {
+			list.getTodoItems().add(new TodoItemBuilder(el).build());
 		}
 		return list;
 	}
@@ -260,10 +257,8 @@ public class ResourceFactory {
 		Document document = DOMUtils.buildDocument(httpStream);
 		Element root = document.getDocumentElement();
 		List<TodoItem> list = new ArrayList<TodoItem>();
-		for (Iterator it = root.getChildren().iterator(); it.hasNext();) {
-			Element e = (Element) it.next();
-			TodoItem item = new TodoItemBuilder(e).build();
-			list.add(item);
+		for (Element e : DOMUtils.getChildren(root)) {
+			list.add(new TodoItemBuilder(e).build());
 		}
 		return list;
 	}

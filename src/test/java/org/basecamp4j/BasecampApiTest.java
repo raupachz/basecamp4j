@@ -36,11 +36,6 @@ public class BasecampApiTest {
 		api = new BasecampApi(host , token);
 	}
 	
-	@After
-	public void tearDown() {
-		api.dispose();
-	}
-	
 	@Test @Ignore
 	public void testGetAccount() {
 		Account account = api.getAccount();
