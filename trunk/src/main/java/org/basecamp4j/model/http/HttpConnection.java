@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.basecamp4j.xml.DOMUtils;
 import org.basecamp4j.xml.XMLFormatter;
 
 /*
@@ -26,7 +27,7 @@ import org.basecamp4j.xml.XMLFormatter;
  */
 public class HttpConnection  {
 	
-	private static Logger logger = Logger.getLogger("org.beanstalk4j");
+	private static Logger logger = Logger.getLogger("org.basecamp4j");
 	
 	private final String credentials;
 
@@ -73,7 +74,8 @@ public class HttpConnection  {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod(method);
 			con.setRequestProperty("Authorization", "Basic " + credentials);
-			con.setRequestProperty("Content-Type", "application/xml;charset=utf-8");
+			con.setRequestProperty("Accept", "application/xml");
+			con.setRequestProperty("Content-Type", "application/xml");
 			if (messageBody != null) {
 				con.setDoOutput(true);
 				byte[] body = messageBody.getBytes("utf-8");
@@ -89,9 +91,13 @@ public class HttpConnection  {
 				ByteBuffer buffer = new ByteBuffer(con.getErrorStream());
 				if (logger.isLoggable(Level.FINE)) {
 					String response = new String(buffer.getByteArray(), "utf-8");
-					String prettyMessageBody = XMLFormatter.prettyFormat(response);
-					for (String line : prettyMessageBody.split("\\n")) {
-						logger.fine("<< HTTP " + line);
+					if (DOMUtils.isXML(response)) {
+						String prettyMessageBody = XMLFormatter.prettyFormat(response);
+						for (String line : prettyMessageBody.split("\\n")) {
+							logger.fine("<< HTTP " + line);
+						}
+					} else {
+						logger.fine("<< HTTP " + response);
 					}
 				}
 				return null;

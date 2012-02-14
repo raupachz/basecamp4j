@@ -4,8 +4,6 @@ import org.basecamp4j.model.ProjectCounts;
 import org.basecamp4j.xml.DOMUtils;
 import org.w3c.dom.Element;
 
-import com.sun.xml.internal.ws.util.StringUtils;
-
 /*
  * Copyright 2010 Björn Raupach
 
