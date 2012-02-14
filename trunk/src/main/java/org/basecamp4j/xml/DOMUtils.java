@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,10 +30,29 @@ import org.w3c.dom.NodeList;
  */
 public class DOMUtils {
 	
+	private static final ThreadLocal<DocumentBuilder> builderLocal = new ThreadLocal<DocumentBuilder>() {
+		protected DocumentBuilder initialValue() {
+			try {
+				return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			} catch (ParserConfigurationException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	};
+	
+    public static boolean isXML(String content) {
+    	return content != null && content.startsWith("<?xml");
+    }
+    
+    public static String stripXML(String content) {
+    	content = content.replaceAll("\\<.*?\\>", "");
+    	content = content.replaceAll("\\n", "");
+    	return content;
+    }
+	
 	public static Document buildDocument(InputStream in) {
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+			DocumentBuilder builder = builderLocal.get();
 			Document document = builder.parse(in);
 			document.normalizeDocument();
 			in.close();
