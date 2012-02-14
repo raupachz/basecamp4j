@@ -1,12 +1,15 @@
 package org.basecamp4j.xml;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /*
@@ -50,5 +53,31 @@ public class DOMUtils {
 		}
 		return value;
 	}
-
+	
+	public static Element getChild(Element parent, String element) {
+		NodeList list = parent.getElementsByTagName(element);
+		return (Element) list.item(0);
+	}
+	
+	public static List<Element> getChildren(Element parent, String element) {
+		List<Element> children = new ArrayList<Element>();
+		NodeList list = parent.getElementsByTagName(element);
+		for (int i=0; i < list.getLength(); i++) {
+			if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
+				children.add((Element) list.item(i));
+			}
+		}
+		return children;
+	}
+	
+	public static List<Element> getChildren(Element parent) {
+		List<Element> children = new ArrayList<Element>();
+		NodeList list = parent.getChildNodes();
+		for (int i=0; i < list.getLength(); i++) {
+			if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {
+				children.add((Element) list.item(i));
+			}
+		}
+		return children;
+	}
 }
