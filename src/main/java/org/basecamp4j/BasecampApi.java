@@ -1,13 +1,15 @@
 package org.basecamp4j;
 
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.basecamp4j.factory.ResourceFactory;
+import org.basecamp4j.logging.DefaultFormatter;
 import org.basecamp4j.model.Account;
 import org.basecamp4j.model.Attachment;
 import org.basecamp4j.model.Category;
@@ -42,6 +44,8 @@ import org.basecamp4j.utils.IsoDateTimeFormat;
    limitations under the License.
  */
 public class BasecampApi {
+	
+	private static final Logger logger = Logger.getLogger("org.basecamp4j");
 
 	private final String host;
 	private final HttpConnection httpConnection;
@@ -56,6 +60,24 @@ public class BasecampApi {
 		this.host = host;
 		this.httpConnection = new HttpConnection(token, "X");
 		this.factory = new ResourceFactory();
+	}
+	
+	public BasecampApi(String host, String token, boolean debug) {
+		this.host = host;
+		this.httpConnection = new HttpConnection(token, "X");
+		this.factory = new ResourceFactory();
+		if (debug) {
+			initializeLogging();
+		}
+	}
+	
+	private void initializeLogging() {
+		Handler[] handlers = Logger.getLogger("").getHandlers();
+		for (Handler h : handlers) {
+			h.setLevel(Level.FINE);
+			h.setFormatter(new DefaultFormatter());
+		}
+		logger.setLevel(Level.FINE);
 	}
 
 	/**

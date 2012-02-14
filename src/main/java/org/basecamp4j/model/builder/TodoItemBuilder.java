@@ -7,8 +7,6 @@ import org.basecamp4j.utils.IsoDateTimeFormat;
 import org.basecamp4j.xml.DOMUtils;
 import org.w3c.dom.Element;
 
-import com.sun.xml.internal.ws.util.StringUtils;
-
 /*
  * Copyright 2010 Björn Raupach
 
