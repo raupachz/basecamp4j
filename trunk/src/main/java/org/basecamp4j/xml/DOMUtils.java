@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.traversal.NodeIterator;
 
 /*
  * Copyright 2011 Björn Raupach
@@ -66,7 +67,7 @@ public class DOMUtils {
 		String value = null;
 		NodeList nodeList = element.getElementsByTagName(tag);
 		if(nodeList != null && nodeList.getLength() > 0) {
-			Element el = (Element)nodeList.item(0);
+			Element el = (Element) nodeList.item(0);
 			if (el.getFirstChild() != null) {
 				value = el.getFirstChild().getNodeValue();
 			}
@@ -92,6 +93,7 @@ public class DOMUtils {
 	
 	public static List<Element> getChildren(Element parent) {
 		List<Element> children = new ArrayList<Element>();
+
 		NodeList list = parent.getChildNodes();
 		for (int i=0; i < list.getLength(); i++) {
 			if (list.item(i).getNodeType() == Node.ELEMENT_NODE) {

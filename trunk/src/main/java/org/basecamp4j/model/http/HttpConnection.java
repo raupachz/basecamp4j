@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.basecamp4j.utils.Base64Coder;
 import org.basecamp4j.xml.DOMUtils;
 import org.basecamp4j.xml.XMLFormatter;
 
@@ -32,7 +33,7 @@ public class HttpConnection  {
 	private final String credentials;
 
 	public HttpConnection(String username, String password) {
-		this.credentials = username + ":" + password;
+		this.credentials = Base64Coder.encodeString(username + ":" + password);
 	}
 
 	public InputStream doGet(URL url) {
