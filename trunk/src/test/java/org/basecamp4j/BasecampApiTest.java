@@ -181,7 +181,7 @@ public class BasecampApiTest {
 		api.createProject("My new project");
 	}
 	
-	@Test 
+	@Test @Ignore
 	public void testGetMilestones() {
 		Project project = api.getProjects().get(0);
 		List<Milestone> milestones = api.getMilestones(project);
