@@ -3,15 +3,17 @@
   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.1 http://maven.apache.org/xsd/assembly-1.1.1.xsd">
   <id>bundle</id>
   <formats>
-	<format>tar.gz</format>
     <format>zip</format>
   </formats>
   <files>
-    <file>
-      <source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
+		<file>
+      <source>${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}</source>
     </file>
     <file>
-      <source>target/${project.artifactId}-${project.version}-sources.${project.packaging}</source>
+      <source>${project.build.directory}/${project.artifactId}-${project.version}-sources.${project.packaging}</source>
+    </file>
+    <file>
+      <source>${project.build.directory}/${project.artifactId}-${project.version}-javadoc.${project.packaging}</source>
     </file>
     <file>
       <source>LICENSE</source>
@@ -20,9 +22,4 @@
       <source>NOTICE</source>
     </file>
   </files>
-  <dependencySets>
-    <dependencySet>
-      <outputDirectory>lib</outputDirectory>
-    </dependencySet>
-  </dependencySets>
 </assembly>
