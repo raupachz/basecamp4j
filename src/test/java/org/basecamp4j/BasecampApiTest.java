@@ -18,22 +18,21 @@ import org.basecamp4j.model.ProjectCounts;
 import org.basecamp4j.model.Resource;
 import org.basecamp4j.model.TodoItem;
 import org.basecamp4j.model.TodoList;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class BasecampApiTest {
 	
-	public static String host = "domain.basecamphq.com";
-	public static String token = "token";
+	public static String host = "<host>";
+	public static String token = "<token>";
 	public static long projectId = 1L;
 	
 	private BasecampApi api;
 	
 	@Before
 	public void setUp() throws IOException {
-		api = new BasecampApi(host , token);
+		api = new BasecampApi(host , token, true);
 	}
 	
 	@Test @Ignore
@@ -45,6 +44,9 @@ public class BasecampApiTest {
 	@Test @Ignore
 	public void testGetProjects() {
 		List<Project> projects = api.getProjects();
+		for (Project p : projects) {
+			System.out.println(p.getName() + " " + p.getCreatedOn() + " " + p.getStatus());
+		}
 		assertNotNull(projects);
 	}
 	
@@ -127,6 +129,13 @@ public class BasecampApiTest {
 	@Test @Ignore
 	public void testGetTodoLists() {
 		List<TodoList> todos = api.getTodoLists();
+		for (TodoList todoList : todos) {
+			System.out.println("Todo-List: " + todoList.getName() + " " + todoList.getDescription());
+			
+			for (TodoItem i : todoList.getTodoItems()) {
+				System.out.println("Todo-Item: " + i.getContent());
+			}
+		}
 		assertNotNull(todos);
 	}
 	
@@ -172,9 +181,9 @@ public class BasecampApiTest {
 		api.createProject("My new project");
 	}
 	
-	@Test @Ignore
+	@Test 
 	public void testGetMilestones() {
-		Project project = api.getProject(projectId);
+		Project project = api.getProjects().get(0);
 		List<Milestone> milestones = api.getMilestones(project);
 		assertNotNull(milestones);
 		for (Milestone m : milestones) {
@@ -184,7 +193,7 @@ public class BasecampApiTest {
 	
 	@Test @Ignore
 	public void testCompleteAndUncompleteMilestones() {
-		Project project = api.getProject(projectId);
+		Project project = api.getProject(6139821L);
 		List<Milestone> milestones = api.getMilestones(project);
 		if (milestones.size() > 0) {
 			Milestone milestone = milestones.get(0);
@@ -232,6 +241,11 @@ public class BasecampApiTest {
 		Company me = api.getCompany(1l);
 		TodoList todo = api.getTodoList(1l);
 		api.createItem(todo, "write something", new Date(), me, false);
+	}
+	
+	@Test @Ignore
+	public void testGetCompanies() {
+		List<Company> companies = api.getCompanies();
 	}
 	
 }
